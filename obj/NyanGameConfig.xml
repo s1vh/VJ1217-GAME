@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'19/02/2015'</value>
+      <value>'26/03/2015'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -32,7 +32,7 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>F:\DATA\JWEB\VJ1217-GAME</path-element>
+      <path-element>C:\Users\s1vh\Documents\UJI1415\JWEB\VJ1217-GAME</path-element>
       <path-element>C:\_dev\Starling-Framework\starling\src</path-element>
       <path-element>C:\_dev\Hi-ReS-Stats\src</path-element>
       <path-element>C:\_dev\GreenSock-AS3\src</path-element>
@@ -40,7 +40,7 @@
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>F:\DATA\JWEB\VJ1217-GAME\src\StarlingProject.as</path-element>
+    <path-element>C:\Users\s1vh\Documents\UJI1415\JWEB\VJ1217-GAME\src\StarlingProject.as</path-element>
   </file-specs>
   <default-background-color>#000000</default-background-color>
   <default-frame-rate>60</default-frame-rate>
