@@ -1,0 +1,73 @@
+%!PS-Adobe-3.0 
+%%Creator: Adobe Illustrator(TM) 3.2
+%%AI8_CreatorVersion: 16.0.0
+%%For: (Sivh Fallenhart) ()
+%%Title: (invader2Body.ai)
+%%CreationDate: 4/21/2015 5:12 AM
+%%Canvassize: 8640
+%%BoundingBox: 522 320 757 455
+%%DocumentProcessColors: Magenta Yellow
+%%DocumentNeededResources: procset Adobe_packedarray 2.0 0
+%%+ procset Adobe_cmykcolor 1.1 0
+%%+ procset Adobe_cshow 1.1 0
+%%+ procset Adobe_customcolor 1.0 0
+%%+ procset Adobe_IllustratorA_AI3 1.0 1
+%AI3_ColorUsage: Color
+%AI3_TemplateBox: 640 400 640 400
+%AI3_TileBox: 219.04 102.3398 1060.96 697.6599
+%AI3_DocumentPreview: None
+%%PageOrigin:0 0
+%AI7_GridSettings: 72 8 72 8 1 0 0.8 0.8 0.8 0.9 0.9 0.9
+%AI9_Flatten: 1
+%AI12_CMSettings: 00.MS
+%%EndComments
+%%BeginProlog
+%%IncludeResource: procset Adobe_packedarray 2.0 0
+Adobe_packedarray /initialize get exec
+%%IncludeResource: procset Adobe_cmykcolor 1.1 0
+%%IncludeResource: procset Adobe_cshow 1.1 0
+%%IncludeResource: procset Adobe_customcolor 1.0 0
+%%IncludeResource: procset Adobe_IllustratorA_AI3 1.0 1
+%%EndProlog
+%%BeginSetup
+Adobe_cmykcolor /initialize get exec
+Adobe_cshow /initialize get exec
+Adobe_customcolor /initialize get exec
+Adobe_IllustratorA_AI3 /initialize get exec
+%%EndSetup
+0 A
+u
+u
+0 O
+0 0.94641 0.916289 0 k
+0 J 0 j 1 w 10 M []0 d603.3301 455 m
+F
+731.0781 320.8594 m
+731 346.3301 L
+756.6699 346.3301 L
+756.6699 404 L
+731 404 L
+731.0625 429.375 L
+675.25 429.3335 L
+675.0625 455 l
+603.3301 455 l
+603.3301 430 L
+546.6699 430 L
+546.6699 404.6699 L
+522 404.6699 L
+522 346 L
+547.3301 346 L
+547.292 320.8594 L
+731.0781 320.8594 L
+f
+U
+U
+%%PageTrailer
+gsave annotatepage grestore showpage
+%%Trailer
+Adobe_IllustratorA_AI3 /terminate get exec
+Adobe_customcolor /terminate get exec
+Adobe_cshow /terminate get exec
+Adobe_cmykcolor /terminate get exec
+Adobe_packedarray /terminate get exec
+%%EOF
