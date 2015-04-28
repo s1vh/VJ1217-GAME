@@ -1,4 +1,4 @@
-package src
+package
 {
 	import flash.display.Sprite;
 	
@@ -6,20 +6,20 @@ package src
 	
 	import starling.core.Starling;
 	
-	[SWF(frameRate="60", width="1280", height="800", backgroundColor="0x000000")]
-	public class StarlingProject extends Sprite
+	[SWF(framerate = "60", width = "1280", height = "800", backgroundColor = "0xFFFFFF")]
+	public class Main extends Sprite
 	{
 		
 		private var stats:Stats;
 		private var myStarling:Starling;
 		
-		public function StarlingProject()
+		public function Main()
 		{
 			stats = new Stats();
 			this.addChild(stats);
 			
 			myStarling = new Starling(Game, stage);
-			myStarling.antiAliasing = 2;
+			myStarling.antiAliasing = 1;
 			myStarling.start();
 		}
 	}
