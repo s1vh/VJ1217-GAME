@@ -26,6 +26,7 @@ package
 			this.addEventListener(events.NavigationEvent.CHANGE_SCREEN, onChangeScreen);
 			
 			screenIngame = new InGame();
+			this.addChild(screenIngame);
 			screenIngame.disposeTemporarily();
 			
 			screenWelcome = new Welcome();

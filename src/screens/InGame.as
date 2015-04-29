@@ -54,7 +54,7 @@ package screens
 			cat.x = stage.stageWidth/2;
 			cat.y = stage.stageHeight/2;
 			this.addChild(cat);
-			
+									
 			gameArea = new Rectangle(0, 100, stage.stageWidth, stage.stageHeight - 250);
 		}
 		
@@ -75,12 +75,12 @@ package screens
 			trace("probando probando");
 			playerSpeed = 0;
 			hitObstacle = 0;
-			
+			touchY = stage.stageHeight * 0.5;
 			scoreDistance = 0;
 			obstacleGapCount = 0;
 			
-			this.launchCat();
-			
+			launchCat();
+									
 		}
 		
 		
@@ -116,12 +116,14 @@ package screens
 					else
 					{
 						gameState = "flying";
+						trace("puedo volaaaaaaaar");
 					}
 					break;
 				case "flying":
 					
 					if (hitObstacle <= 0)
 					{
+						trace(touchY);
 						cat.y -= (cat.y - touchY) * 0.1;
 						
 						if (-(cat.y - touchY) < 150 && -(cat.y - touchY) > -150)
@@ -144,6 +146,7 @@ package screens
 					{
 						hitObstacle--;
 						cameraShake();
+						trace("auch");
 					}
 					
 					playerSpeed -= (playerSpeed - MIN_SPEED) * 0.01;
@@ -152,6 +155,7 @@ package screens
 					
 					break;
 				case "over":
+					trace("eh D:");
 					break;
 			}
 		}
