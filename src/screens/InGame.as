@@ -54,7 +54,7 @@ package screens
 			cat.x = stage.stageWidth/2;
 			cat.y = stage.stageHeight/2;
 			this.addChild(cat);
-									
+			
 			gameArea = new Rectangle(0, 100, stage.stageWidth, stage.stageHeight - 250);
 		}
 		
@@ -80,7 +80,7 @@ package screens
 			obstacleGapCount = 0;
 			
 			this.launchCat();
-									
+			
 		}
 		
 		
