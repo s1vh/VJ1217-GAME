@@ -4,7 +4,7 @@ package screens
 	import flash.utils.getTimer;
 		
 	import objects.Cat;
-		
+
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -39,12 +39,14 @@ package screens
 		public function InGame()
 		{
 			super();
+			trace("se genera la pantalla");
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
 		private function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			trace("ahora se dibujará la pantalla");
 			drawGame();
 		}
 		
@@ -55,7 +57,7 @@ package screens
 			cat.y = stage.stageHeight/2;
 			this.addChild(cat);
 									
-			gameArea = new Rectangle(0, 100, stage.stageWidth, stage.stageHeight - 250);
+			gameArea = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight);
 		}
 		
 		public function disposeTemporarily():void
@@ -75,9 +77,9 @@ package screens
 			trace("probando probando");
 			playerSpeed = 0;
 			hitObstacle = 0;
-			touchY = stage.stageHeight * 0.5;
 			scoreDistance = 0;
 			obstacleGapCount = 0;
+			touchY = stage.stageHeight / 2;
 			
 			launchCat();
 									
@@ -87,16 +89,22 @@ package screens
 		
 		private function launchCat():void
 		{
-			this.addEventListener(TouchEvent.TOUCH, onTouch);
+			stage.addEventListener(TouchEvent.TOUCH, onTouch);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
 		}
 		
 		private function onTouch(event:TouchEvent):void
 		{
+			//trace("target =" +event.target);
+			//trace(event.currentTarget);
+			trace("estamos dentro");
 			touch = event.getTouch(stage);
-			
-			touchX = touch.globalX;
-			touchY = touch.globalY;
+			if ( touch != null) {
+				touchY = touch.globalY;
+				touchX = touch.globalX;
+			}
+			trace(touchY);
+			trace(touchX);
 		}
 		
 		private function onGameTick(event:Event):void
@@ -116,14 +124,12 @@ package screens
 					else
 					{
 						gameState = "flying";
-						trace("puedo volaaaaaaaar");
 					}
 					break;
 				case "flying":
 					
 					if (hitObstacle <= 0)
 					{
-						trace(touchY);
 						cat.y -= (cat.y - touchY) * 0.1;
 						
 						if (-(cat.y - touchY) < 150 && -(cat.y - touchY) > -150)
@@ -135,18 +141,19 @@ package screens
 						{
 							cat.y = gameArea.bottom - cat.height * 0.5;
 							cat.rotation = deg2rad(0);
+							
 						}
 						if (cat.y < gameArea.top + cat.height * 0.5)
 						{
 							cat.y = gameArea.top + cat.height * 0.5;
 							cat.rotation = deg2rad(0);
+							
 						}
 					}
 					else
 					{
 						hitObstacle--;
 						cameraShake();
-						trace("auch");
 					}
 					
 					playerSpeed -= (playerSpeed - MIN_SPEED) * 0.01;
@@ -155,7 +162,6 @@ package screens
 					
 					break;
 				case "over":
-					trace("eh D:");
 					break;
 			}
 		}
