@@ -24,7 +24,7 @@ package screens
 		
 		private function onAddedToStage(event:starling.events.Event):void
 		{
-			trace("ESTA ES LA ALARMA DE QUE LA PANTALLA DE INICIO VA COMO DIOS MANDA");
+			trace("Game initialized OK");
 			
 			drawScreen();
 		}

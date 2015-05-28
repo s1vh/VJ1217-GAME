@@ -11,6 +11,9 @@ package
 		[Embed(source = "../media/graphics/cat0000.png")]
 		public static const cat:Class;
 		
+		[Embed(source = "../media/graphics/invader0000.png")]
+		public static const invader:Class;
+		
 		[Embed(source = "../media/graphics/empezarplaceholder.png")]
 		public static const empezar:Class;
 		

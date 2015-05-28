@@ -19,7 +19,7 @@ package
 			this.addChild(stats);
 			
 			myStarling = new Starling(Game, stage);
-			myStarling.antiAliasing = 4;
+			myStarling.antiAliasing = 1;
 			myStarling.start();
 		}
 	}
