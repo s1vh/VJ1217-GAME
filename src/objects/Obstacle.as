@@ -5,11 +5,14 @@ package objects
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import flash.display.Graphics;
 	
 	public class Obstacle extends starling.display.Sprite
 	{
 		private var obstacleArt:Image;
 		private var obstacleType:int;
+		private var difficulty:int;
+		private var currentDate:Date = new Date();
 		
 		public function Obstacle(type:int)
 		{
@@ -22,13 +25,13 @@ package objects
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
-			createObstacleArt();
+			createObstacleArt(this.obstacleType);
 			
 		}
 		
-		private function createObstacleArt():void
+		private function createObstacleArt(spriteType:int):void
 		{
-			obstacleArt = new Image(Assets.getTexture("invader"));
+			obstacleArt = new Image(Assets.getTexture("sprite"+spriteType));
 			obstacleArt.x = Math.ceil(-obstacleArt.width/2);
 			obstacleArt.y = Math.ceil(-obstacleArt.height/2);
 			this.addChild(obstacleArt);
@@ -36,7 +39,22 @@ package objects
 		
 		private function onGameTick():void
 		{
-			this.x -= 10;
+			if (this.obstacleType == 2) {
+				
+				this.x -= 10;
+				this.y += Math.cos(this.x * 0.015) * 25;
+			}else this.x -= 10;
+				
+			
+			
+		}
+		
+		public function get type():int {
+			return obstacleType;
+		}
+		
+		public function set speed(_speed:int):void {
+				this.difficulty = _speed;
 		}
 	}
 }

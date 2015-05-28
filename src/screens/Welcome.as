@@ -24,7 +24,7 @@ package screens
 		
 		private function onAddedToStage(event:starling.events.Event):void
 		{
-			trace("Game initialized OK");
+			
 			
 			drawScreen();
 		}
@@ -32,13 +32,13 @@ package screens
 		private function drawScreen():void
 		{
 			title = new Image(Assets.getTexture("titulo"));
-			title.x = 530;
-			title.y = 100;
+			title.x = 440;
+			title.y = 20;
 			this.addChild(title);
 			
 			playBtn = new Button(Assets.getTexture("empezar"));
-			playBtn.x = 520;
-			playBtn.y = 500;
+			playBtn.x = 500;
+			playBtn.y = 260;
 			this.addChild(playBtn);
 			
 			cat = new Image(Assets.getTexture("cat"));
@@ -70,9 +70,9 @@ package screens
 			this.visible = true;
 			
 			cat.x = -cat.width;
-			cat.y = 300;
+			cat.y = 100;
 			
-			TweenLite.to(cat, 2, { x: 540 } );
+			TweenLite.to(cat, 2, { x: 80 } );
 			
 			this.addEventListener(Event.ENTER_FRAME, heroAnimation);
 		}
@@ -80,8 +80,8 @@ package screens
 		private function heroAnimation(event:starling.events.Event):void
 		{
 			var currentDate:Date = new Date();
-			cat.y = 300 + (Math.cos(currentDate.getTime() * 0.002) * 25);
-			playBtn.y = 500 + (Math.cos(currentDate.getTime() * 0.002) * 10);
+			cat.y = 100 + (Math.cos(currentDate.getTime() * 0.002) * 100);
+			playBtn.y = 260 + (Math.cos(currentDate.getTime() * 0.002) * 10);
 		}
 	}
 	

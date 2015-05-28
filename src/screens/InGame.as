@@ -18,7 +18,11 @@ package screens
 	{
 		private var cat:Cat;
 		private var obstacle:Obstacle;
-		private var enemigocreado:int = 0;
+		private var enemigoCreado:int = 0;
+		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
+		private var previousXMin:int = -500;
+		private var previousXMax:int = 1000;
+		private var invincibleTimer:int = 0;
 		
 		private var timePrevious:Number;
 		private var timeCurrent:Number = 50;
@@ -31,8 +35,7 @@ package screens
 		
 		private var scoreDistance:int;
 		private var obstacleGapCount:int;
-		
-		private var gameArea:Rectangle;
+		private var hit:Boolean = false;
 		
 		private var touch:Touch;
 		private var touchX:Number;
@@ -57,8 +60,9 @@ package screens
 			cat.x = stage.stageWidth/2;
 			cat.y = stage.stageHeight/2;
 			this.addChild(cat);
-			trace(stage.stageHeight);
-			trace(stage.stageWidth);
+			
+									
+			
 		}
 		
 		public function disposeTemporarily():void
@@ -80,7 +84,9 @@ package screens
 			scoreDistance = 0;
 			obstacleGapCount = 0;
 			
+			
 			launchCat();
+									
 		}
 		
 		
@@ -99,6 +105,7 @@ package screens
 		
 		private function onGameTick(event:Event):void
 		{
+			
 			switch(gameState)
 			{
 				case "idle":
@@ -117,10 +124,9 @@ package screens
 						
 					}
 					break;
-					
 				case "flying":
 					elapsed++;
-					
+
 					if (hitObstacle <= 0)
 					{
 						cat.y -= (cat.y - touchY) * 0.05;
@@ -140,61 +146,189 @@ package screens
 							cat.y = cat.height * 0.5;
 							cat.rotation = deg2rad(0);
 						}
-						if (elapsed == timeCurrent)
-						{
-							obstacle = new Obstacle(1);
-							obstacle.x = stage.stageWidth + obstacle.width*2;
-			                obstacle.y = Math.random() * 800;
-							if (obstacle.y > 800 - obstacle.height * 0.5) obstacle.y = 800 - obstacle.height*2;
-						    if (obstacle.y < obstacle.height * 0.5) obstacle.y = obstacle.height*2;
-			                this.addChild(obstacle);
-							enemigocreado++;
-							elapsed = 0;
-							trace(enemigocreado);
+						
+						obstacleCheck();
+						obstacleCreate();
+						//trace(enemigoCreado);
+			}
+			
+			
+			}
+		}
+		private function obstacleCheck():void
+		{
+			var obstacleToTrack:Obstacle;
+			if (enemigoCreado > 1)
+			{
+				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
+				{
+					obstacleToTrack = obstaclesToAnimate[i]
+					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
+					{
+						switch(obstacleToTrack.type) {
+						case 1:
+							hit = true;
+							break;
+						case 2: 
+							hit = true;
+							break;
+						default: 
+							timeCurrent -= 0.5
+							break;
 						}
-						if (enemigocreado >= 1)
-						{
-							if (obstacle.x < -50)
-							{
-								this.removeChild(obstacle);
-								trace("eh! ");
-								enemigocreado--;
-							}
-							
-						}
+						obstaclesToAnimate.splice(i, 1);
+						this.removeChild(obstacleToTrack);
+						enemigoCreado--;
 						
 					}
-					else
-					{
-						hitObstacle--;
-						cameraShake();
-						trace("auch! ");
+					if (obstacleToTrack.x < -(obstacleToTrack.width / 2)) {
+					
+						obstaclesToAnimate.splice(i, 1);
+						this.removeChild(obstacleToTrack);
+						enemigoCreado--;
 					}
-					
-					playerSpeed -= (playerSpeed - MIN_SPEED) * 0.01;
-					
-					scoreDistance += (playerSpeed * elapsed) * 0.1;
-					
-					break;
-					
-				case "over":
-					trace("eh D:");
-					break;
+				}
 			}
 		}
 		
-		private function cameraShake():void
-		{
-			if (hitObstacle > 0)
-			{
-				this.x = int(Math.random() * hitObstacle);
-				this.y = int(Math.random() * hitObstacle);
-			}
-			else if (x != 0)
-			{
-				this.x = 0;
-				this.y = 0;
+		private function obstacleCreate():void {
+			
+			var obstacleCreated:Obstacle;
+			var type:int;
+			var stars:int;
+			var preY:int;
+			if (elapsed == timeCurrent + 20) {
+			
+				type = Math.round(Math.random() * 9) + 1;
+				//trace(type);
+				switch(type) {
+				
+					case 1:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 2:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 3:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+					
+					case 4:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 5:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 6:
+						obstacleCreated = new Obstacle(1);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 7:
+						stars = Math.round(Math.random() * 2) + 3;
+						trace(stars);
+						obstacleCreated = new Obstacle(3);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						preY = obstacleCreated.y;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						for (var i:uint = 2; i <= stars; i++) {
+							trace("urp");
+							obstacleCreated = new Obstacle(3);
+							obstacleCreated.y = preY;
+							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * i);
+							this.addChild(obstacleCreated);
+							obstaclesToAnimate.push(obstacleCreated);
+						}
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 8:
+						stars = Math.round(Math.random() * 2) + 3;
+						trace(stars);
+						obstacleCreated = new Obstacle(3);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						preY = obstacleCreated.y;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						for (var j:uint = 2; j <= stars; j++) {
+							trace("urp");
+							obstacleCreated = new Obstacle(3);
+							obstacleCreated.y = preY;
+							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * j);
+							this.addChild(obstacleCreated);
+							obstaclesToAnimate.push(obstacleCreated);
+						}
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 9:
+						obstacleCreated = new Obstacle(3);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+						this.addChild(obstacleCreated);
+						obstaclesToAnimate.push(obstacleCreated);
+						enemigoCreado++;
+						elapsed = 0;
+						break;
+						
+					case 10:
+						obstacleCreated = new Obstacle(2);
+						obstacleCreated.y = Math.random() * stage.stageHeight;
+					    obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
+					    this.addChild(obstacleCreated);
+					    obstaclesToAnimate.push(obstacleCreated);
+					    enemigoCreado++;
+					    elapsed = 0;
+						break;
+				}
+				
 			}
 		}
+		
+		
 	}
 }
