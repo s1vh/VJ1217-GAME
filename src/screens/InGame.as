@@ -41,7 +41,6 @@ package screens
 		private var touchX:Number;
 		private var touchY:Number;
 		
-		
 		public function InGame()
 		{
 			super();
@@ -60,9 +59,6 @@ package screens
 			cat.x = stage.stageWidth/2;
 			cat.y = stage.stageHeight/2;
 			this.addChild(cat);
-			
-									
-			
 		}
 		
 		public function disposeTemporarily():void
@@ -84,12 +80,8 @@ package screens
 			scoreDistance = 0;
 			obstacleGapCount = 0;
 			
-			
 			launchCat();
-									
 		}
-		
-		
 		
 		private function launchCat():void
 		{
@@ -100,7 +92,11 @@ package screens
 		private function onTouch(event:TouchEvent):void
 		{
 			touch = event.getTouch(stage);
-			if (touch != null) touchY = touch.globalY;
+			
+			if (touch != null && 50 < touch.globalY && touch.globalY < 750 )	// STARLING <3 MAGIC NUMBERS
+			{																	// si usamos cat.height/2 al pillarse del rectángulo resultante del objeto en movimiento, aumenta cuando éste se inclina
+				touchY = touch.globalY;											// por lo que se detiene antes de alcanzar los bordes de la pantalla, así que es mejor usar los del sprite tal cual
+			}																	// (cómete esa Mar Marcos)
 		}
 		
 		private function onGameTick(event:Event):void
@@ -110,79 +106,76 @@ package screens
 			{
 				case "idle":
 					// Take off
+					
 					if (cat.x < stage.stageWidth * 0.5 * 0.5)
 					{
 						cat.x += ((stage.stageWidth * 0.5 * 0.5 + 10) - cat.x) * 0.05;
 						cat.y = stage.stageHeight * 0.5;
 						
-						playerSpeed += (MIN_SPEED - playerSpeed) * 0.05;
-						
+						playerSpeed += (MIN_SPEED - playerSpeed) * 0.05;	
 					}
+					
 					else
 					{
 						gameState = "flying";
-						
 					}
+					
 					break;
+					
 				case "flying":
 					elapsed++;
-
+					
 					if (hitObstacle <= 0)
 					{
 						cat.y -= (cat.y - touchY) * 0.05;
-						
-						if (-(cat.y - touchY) < cat.height/2 && -(cat.y - touchY) > -cat.height/2)
+							
+						if (-(cat.y - touchY) < cat.height/2 && - (cat.y - touchY) > - cat.height/2)
 						{
 							cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
 						}
 						
-						if (cat.y > 800 - cat.height * 0.5)
-						{
-							cat.y = 800 - cat.height * 0.5;
-							cat.rotation = deg2rad(0);
-						}
-						if (cat.y < cat.height * 0.5)
-						{
-							cat.y = cat.height * 0.5;
-							cat.rotation = deg2rad(0);
-						}
-						
-						obstacleCheck();
-						obstacleCreate();
-						//trace(enemigoCreado);
-			}
-			
-			
+					obstacleCheck();
+					obstacleCreate();
+					//trace(enemigoCreado);
+					}
 			}
 		}
+		
 		private function obstacleCheck():void
 		{
 			var obstacleToTrack:Obstacle;
+			
 			if (enemigoCreado > 1)
 			{
 				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
 				{
 					obstacleToTrack = obstaclesToAnimate[i]
+					
 					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
 					{
 						switch(obstacleToTrack.type) {
+						
 						case 1:
 							hit = true;
 							break;
+							
 						case 2: 
 							hit = true;
 							break;
+							
 						default: 
 							timeCurrent -= 0.5
 							break;
+							
 						}
 						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
 						enemigoCreado--;
 						
 					}
-					if (obstacleToTrack.x < -(obstacleToTrack.width / 2)) {
 					
+					if (obstacleToTrack.x < -(obstacleToTrack.width / 2)) {
+						
 						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
 						enemigoCreado--;
@@ -197,6 +190,7 @@ package screens
 			var type:int;
 			var stars:int;
 			var preY:int;
+			
 			if (elapsed == timeCurrent + 20) {
 			
 				type = Math.round(Math.random() * 9) + 1;
@@ -272,6 +266,7 @@ package screens
 						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
+						
 						for (var i:uint = 2; i <= stars; i++) {
 							trace("urp");
 							obstacleCreated = new Obstacle(3);
@@ -293,6 +288,7 @@ package screens
 						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
+						
 						for (var j:uint = 2; j <= stars; j++) {
 							trace("urp");
 							obstacleCreated = new Obstacle(3);
@@ -324,11 +320,9 @@ package screens
 					    enemigoCreado++;
 					    elapsed = 0;
 						break;
-				}
-				
+				}	
 			}
 		}
-		
-		
 	}
+	
 }
