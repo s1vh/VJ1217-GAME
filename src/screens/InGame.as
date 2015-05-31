@@ -289,12 +289,12 @@ package screens
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						
-						for (var j:uint = 2; j <= stars; j++) {
-							trace("urp");
-							obstacleCreated = new Obstacle(3);
-							obstacleCreated.y = preY;
-							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * j);
-							this.addChild(obstacleCreated);
+						for (var j:uint = 2; j <= stars; j++) {                                            //Hay que averiguar por que estos spawners de estrellas no spawnean lo que deben
+							trace("urp");                                                                  //Puse el urp con tal de averiguar si pasaba por el for las veces que debía
+							obstacleCreated = new Obstacle(3);                                             //y he podido comprobar que así es, pero por alguna razón, sigue sin aparecer mas de
+							obstacleCreated.y = preY;                                                      //una estrella... Tendrá algo que ver con la posicion inicial del resto de estrellas?
+							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * j);      //P.D.: Los cases están separados porque Starling mola y no funcionaba cuando ponía juntos
+							this.addChild(obstacleCreated);                                                //los que son iguales.
 							obstaclesToAnimate.push(obstacleCreated);
 						}
 						enemigoCreado++;
