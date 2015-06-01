@@ -144,6 +144,13 @@ package screens
 		private function obstacleCheck():void
 		{
 			var obstacleToTrack:Obstacle;
+			if (hit) {
+				invincibleTimer++;
+				if (invincibleTimer == 10) {
+					hit = false;
+					invincibleTimer = 0;
+				}
+			}
 			
 			if (enemigoCreado > 1)
 			{
@@ -295,12 +302,12 @@ package screens
 							obstacleCreated.y = preY;                                                      //una estrella... Tendrá algo que ver con la posicion inicial del resto de estrellas?
 							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * j);      //P.D.: Los cases están separados porque Starling mola y no funcionaba cuando ponía juntos
 							this.addChild(obstacleCreated);                                                //los que son iguales.
-							obstaclesToAnimate.push(obstacleCreated);
-						}
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
+							obstaclesToAnimate.push(obstacleCreated);                                      //
+						}                                                                                  //He detectado otro bug en que si colisionas con un enemigo en uno de los primeros
+						enemigoCreado++;                                                                   //segundos, los obstaculos dejan de spawnear; y por alguna razón las colisiones no
+						elapsed = 0;                                                                       //terminan de funcionar bien del todo. En cuanto aparece una estrella las colisiones
+						break;                                                                             //dejan de funcionar... Es posible que todo tenga que ver con lo mismo pero no se por
+						                                                                                   //donde mirar.
 					case 9:
 						obstacleCreated = new Obstacle(3);
 						obstacleCreated.y = Math.random() * stage.stageHeight;
