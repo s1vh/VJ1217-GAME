@@ -20,8 +20,8 @@ package screens
 		private var obstacle:Obstacle;
 		private var enemigoCreado:int = 0;
 		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
-		private var previousXMin:int = -500;
-		private var previousXMax:int = 1000;
+		private var previousMinY:int = -500;
+		private var previousMaxY:int = 1000;
 		private var invincibleTimer:int = 0;
 		
 		private var timePrevious:Number;
@@ -93,10 +93,10 @@ package screens
 		{
 			touch = event.getTouch(stage);
 			
-			if (touch != null && 50 < touch.globalY && touch.globalY < 750 )	// STARLING <3 MAGIC NUMBERS
-			{																	// si usamos cat.height/2 al pillarse del rectángulo resultante del objeto en movimiento, aumenta cuando éste se inclina
-				touchY = touch.globalY;											// por lo que se detiene antes de alcanzar los bordes de la pantalla, así que es mejor usar los del sprite tal cual
-			}																	// (cómete esa Mar Marcos)
+			if (touch != null && 50 < touch.globalY && touch.globalY < 750 )	
+			{																	
+				touchY = touch.globalY;											
+			}																	
 		}
 		
 		private function onGameTick(event:Event):void
@@ -133,10 +133,8 @@ package screens
 						{
 							cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
 						}
-						
-					obstacleCheck();
 					obstacleCreate();
-					//trace(enemigoCreado);
+					obstacleCheck();
 					}
 			}
 		}
@@ -146,13 +144,13 @@ package screens
 			var obstacleToTrack:Obstacle;
 			if (hit) {
 				invincibleTimer++;
-				if (invincibleTimer == 10) {
-					hit = false;
+				if (invincibleTimer == 10) {        
+					hit = false;                    
 					invincibleTimer = 0;
 				}
 			}
 			
-			if (enemigoCreado > 1)
+			if (obstaclesToAnimate.length > 0)   
 			{
 				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
 				{
@@ -163,21 +161,20 @@ package screens
 						switch(obstacleToTrack.type) {
 						
 						case 1:
+						case 2:
 							hit = true;
 							break;
-							
-						case 2: 
-							hit = true;
-							break;
-							
-						default: 
-							timeCurrent -= 0.5
+								
+						case 3:                     
+							timeCurrent -= 1     
+							timeCurrent = Math.max(timeCurrent, 0);
 							break;
 							
 						}
+						
+						
 						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
-						enemigoCreado--;
 						
 					}
 					
@@ -185,7 +182,7 @@ package screens
 						
 						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
-						enemigoCreado--;
+						
 					}
 				}
 			}
@@ -197,134 +194,60 @@ package screens
 			var type:int;
 			var stars:int;
 			var preY:int;
+			var preX:int = stage.stageWidth;
 			
 			if (elapsed == timeCurrent + 20) {
 			
 				type = Math.round(Math.random() * 9) + 1;
-				//trace(type);
+				
 				switch(type) {
 				
 					case 1:
-						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
 					case 2:
-						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
 					case 3:
-						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-					
 					case 4:
-						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
 					case 5:
-						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
 					case 6:
 						obstacleCreated = new Obstacle(1);
 						obstacleCreated.y = Math.random() * stage.stageHeight;
 						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
 						elapsed = 0;
 						break;
 						
 					case 7:
+					case 8:
+					case 9:
 						stars = Math.round(Math.random() * 2) + 3;
-						trace(stars);
-						obstacleCreated = new Obstacle(3);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						preY = obstacleCreated.y;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						
-						for (var i:uint = 2; i <= stars; i++) {
-							trace("urp");
+						preY = Math.random()*stage.stageHeight;
+
+						for(var i:uint = 1; i <= stars; i++){
 							obstacleCreated = new Obstacle(3);
-							obstacleCreated.y = preY;
-							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * i);
+							if(i == 1){
+								while (preY - obstacleCreated.height / 2 < previousMinY && preY + obstacleCreated.height / 2 > previousMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0) { //Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
+									preY = Math.random() * stage.stageHeight;
+									trace("eh");
+								}
+								obstacleCreated .y = preY;
+							}else {
+								obstacleCreated.y = preY;
+							}
+							obstacleCreated.x = (1 + i/30) * preX;
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 						}
-						enemigoCreado++;
+						previousMaxY = preY - obstacleCreated.height / 2;
+						previousMinY = preY + obstacleCreated.height / 2;
 						elapsed = 0;
-						break;
-						
-					case 8:
-						stars = Math.round(Math.random() * 2) + 3;
-						trace(stars);
-						obstacleCreated = new Obstacle(3);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						preY = obstacleCreated.y;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						
-						for (var j:uint = 2; j <= stars; j++) {                                            //Hay que averiguar por que estos spawners de estrellas no spawnean lo que deben
-							trace("urp");                                                                  //Puse el urp con tal de averiguar si pasaba por el for las veces que debía
-							obstacleCreated = new Obstacle(3);                                             //y he podido comprobar que así es, pero por alguna razón, sigue sin aparecer mas de
-							obstacleCreated.y = preY;                                                      //una estrella... Tendrá algo que ver con la posicion inicial del resto de estrellas?
-							obstacleCreated.x = stage.stageWidth + ((obstacleCreated.width / 2) * j);      //P.D.: Los cases están separados porque Starling mola y no funcionaba cuando ponía juntos
-							this.addChild(obstacleCreated);                                                //los que son iguales.
-							obstaclesToAnimate.push(obstacleCreated);                                      //
-						}                                                                                  //He detectado otro bug en que si colisionas con un enemigo en uno de los primeros
-						enemigoCreado++;                                                                   //segundos, los obstaculos dejan de spawnear; y por alguna razón las colisiones no
-						elapsed = 0;                                                                       //terminan de funcionar bien del todo. En cuanto aparece una estrella las colisiones
-						break;                                                                             //dejan de funcionar... Es posible que todo tenga que ver con lo mismo pero no se por
-						                                                                                   //donde mirar.
-					case 9:
-						obstacleCreated = new Obstacle(3);
-						obstacleCreated.y = Math.random() * stage.stageHeight;
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
-						this.addChild(obstacleCreated);
-						obstaclesToAnimate.push(obstacleCreated);
-						enemigoCreado++;
-						elapsed = 0;
-						break;
-						
+						break;	
+							
 					case 10:
 						obstacleCreated = new Obstacle(2);
 						obstacleCreated.y = Math.random() * stage.stageHeight;
 					    obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 					    this.addChild(obstacleCreated);
 					    obstaclesToAnimate.push(obstacleCreated);
-					    enemigoCreado++;
 					    elapsed = 0;
 						break;
 				}	

@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Sprite;
+	import screens.InGame;
 	
 	import net.hires.debug.Stats;
 	

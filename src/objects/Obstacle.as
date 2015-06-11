@@ -40,7 +40,6 @@ package objects
 		private function onGameTick():void
 		{
 			if (this.obstacleType == 2) {
-				
 				this.x -= 10;
 				this.y += Math.cos(this.x * 0.015) * 25;
 			}else this.x -= 10;
