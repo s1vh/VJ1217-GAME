@@ -222,21 +222,31 @@ package screens
 						stars = Math.round(Math.random() * 2) + 3;
 						preY = Math.random()*stage.stageHeight;
 
-						for(var i:uint = 1; i <= stars; i++){
+						for (var i:uint = 1; i <= stars; i++)
+						{
 							obstacleCreated = new Obstacle(3);
-							if(i == 1){
-								while (preY - obstacleCreated.height / 2 < previousMinY && preY + obstacleCreated.height / 2 > previousMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0) { //Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
+							
+							if (i == 1)
+							{
+								while (preY - obstacleCreated.height / 2 < previousMinY && preY + obstacleCreated.height / 2 > previousMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0)	//Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
+								{
 									preY = Math.random() * stage.stageHeight;
 									trace("eh");
 								}
-								obstacleCreated .y = preY;
-							}else {
+								
 								obstacleCreated.y = preY;
 							}
+							
+							else
+							{
+								obstacleCreated.y = preY;
+							}
+							
 							obstacleCreated.x = (1 + i/30) * preX;
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 						}
+						
 						previousMaxY = preY - obstacleCreated.height / 2;
 						previousMinY = preY + obstacleCreated.height / 2;
 						elapsed = 0;
