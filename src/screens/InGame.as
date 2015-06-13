@@ -41,6 +41,8 @@ package screens
 		private var touchX:Number;
 		private var touchY:Number;
 		
+		private var hitpoints:int = 100;
+		
 		public function InGame()
 		{
 			super();
@@ -133,6 +135,7 @@ package screens
 						{
 							cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
 						}
+					
 					obstacleCreate();
 					obstacleCheck();
 					}
@@ -142,9 +145,18 @@ package screens
 		private function obstacleCheck():void
 		{
 			var obstacleToTrack:Obstacle;
-			if (hit) {
+			if (hit)
+			{
+				if (invincibleTimer == 0)
+				{
+					hitpoints = hitpoints - 10;
+					trace("HP="+hitpoints);
+				}
+				
 				invincibleTimer++;
-				if (invincibleTimer == 10) {        
+				
+				if (invincibleTimer == 10)
+				{        
 					hit = false;                    
 					invincibleTimer = 0;
 				}
@@ -158,7 +170,8 @@ package screens
 					
 					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
 					{
-						switch(obstacleToTrack.type) {
+						switch(obstacleToTrack.type)
+						{
 						
 						case 1:
 						case 2:
@@ -192,13 +205,13 @@ package screens
 			
 			var obstacleCreated:Obstacle;
 			var type:int;
-			var stars:int;
+			var starNum:int;
 			var preY:int;
 			var preX:int = stage.stageWidth;
 			
 			if (elapsed == timeCurrent + 20) {
 			
-				type = Math.round(Math.random() * 9) + 1;
+				type = Math.floor(Math.random() * 9) + 1;	// ésto devuelve un random de 1 a 9
 				
 				switch(type) {
 				
@@ -219,10 +232,10 @@ package screens
 					case 7:
 					case 8:
 					case 9:
-						stars = Math.round(Math.random() * 2) + 3;
+						starNum = Math.floor(Math.random() * 5) +1;	// ésto devuelve un random de 1 a 5
 						preY = Math.random()*stage.stageHeight;
 
-						for (var i:uint = 1; i <= stars; i++)
+						for (var i:uint = 1; i <= starNum; i++)
 						{
 							obstacleCreated = new Obstacle(3);
 							
@@ -230,7 +243,7 @@ package screens
 							{
 								while (preY - obstacleCreated.height / 2 < previousMinY && preY + obstacleCreated.height / 2 > previousMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0)	//Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
 								{
-									preY = Math.random() * stage.stageHeight;
+									preY = Math.floor(Math.random() * stage.stageHeight) +1;
 									trace("eh");
 								}
 								
