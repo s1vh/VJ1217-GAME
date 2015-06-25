@@ -247,38 +247,25 @@ package screens
 					case 7:
 						// this is the STAR
 						starNum = 1 + Math.floor(Math.random() * 4);	// ésto devuelve un random de 1 a 5
-						preY = Math.random() * stage.stageHeight;
+						preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));	// MAGIC NUMBERS !! 150 = star.width & .height
+						while (prevMinY < preY && preY < prevMaxY)
+						{
+							preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
+						}
 
-						for (var ind:uint = 1; ind <= starNum; ind++)
+						while (starNum > 0)
 						{
 							obstacleCreated = new Obstacle(3);
 							
-							if (ind == 1)
-							{
-								while (preY - obstacleCreated.height / 2 < prevMinY && preY + obstacleCreated.height / 2 > prevMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0)	//Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
-								{
-									preY = Math.floor(Math.random() * stage.stageHeight) +1;
-									//trace("eh");
-								}
-								
-								obstacleCreated.y = preY;
-							}
+							obstacleCreated.y = preY;
 							
-							else
-							{
-								obstacleCreated.y = preY;
-							}
-							
-							obstacleCreated.x = (stage.stageWidth + ind * 150 * 2/3);	// MAGIC NUMBERS !! 150 = star.width & .height
+							obstacleCreated.x = Math.floor((stage.stageWidth + starNum * 150/2));
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 							
-							prevMinY = obstacleCreated.y - Math.floor(150/2);	// MAGIC NUMBERS !!
-							prevMaxY = obstacleCreated.y + Math.floor(150/2);	// MAGIC NUMBERS !!
+							starNum--;
 						}
 						
-						prevMaxY = preY - obstacleCreated.height / 2;
-						prevMinY = preY + obstacleCreated.height / 2;
 						elapsed = 0;
 						
 						redAvailable = true;
