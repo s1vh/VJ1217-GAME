@@ -206,8 +206,9 @@ package screens
 			
 			if (elapsed == timeCurrent + 50)
 			{
-			
+				
 				type = 1 + Math.floor(Math.random() * 9);	// ésto devuelve un random de 1 a 10
+				//trace("type OK");
 				
 				switch(type)
 				{
@@ -216,6 +217,7 @@ package screens
 					case 2:
 					case 3:
 					case 4:
+						trace("GREEN incoming");
 						
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
@@ -232,15 +234,15 @@ package screens
 						obstacleCreated.x = stage.stageWidth + 200 / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
-						elapsed = 0;
 						
 						redAvailable = true;
 						
 						break;
-					
+						
 					case 5:	
 					case 6:
 					case 7:
+						trace("STAR/s incoming");
 						
 						// this is the STAR
 						starNum = 1 + Math.floor(Math.random() * 4);	// ésto devuelve un random de 1 a 5
@@ -249,7 +251,7 @@ package screens
 						{
 							preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
 						}
-
+						
 						while (starNum > 0)
 						{
 							obstacleCreated = new Obstacle(3);
@@ -263,8 +265,6 @@ package screens
 							starNum--;
 						}
 						
-						elapsed = 0;
-						
 						redAvailable = true;
 						
 						break;	
@@ -276,6 +276,8 @@ package screens
 						// this is the RED ENEMY
 						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
+							trace("RED incoming");
+							
 							obstacleCreated = new Obstacle(2);
 							obstacleCreated.y = 200 + Math.floor(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
@@ -291,13 +293,15 @@ package screens
 						
 						else	// if previous enemy was RED it spawns a GREEN one!
 						{
+							trace("2nd RED not allowed; GREEN incoming");
+							
 							obstacleCreated = new Obstacle(1);
 							obstacleCreated.y = 100 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 100 is enemy.height/2 and 700 is stage.stageHeight - enemy.height/2)
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
 							{
 								obstacleCreated.y = 100 + Math.floor(Math.random() * 700);
 							}
-						
+							
 							prevMinY = obstacleCreated.y - 100;	// MAGIC NUMBERS !!
 							prevMaxY = obstacleCreated.y + 100;	// MAGIC NUMBERS !!
 							
@@ -309,10 +313,12 @@ package screens
 						obstacleCreated.x = stage.stageWidth + 100;	// // MAGIC NUMBERS !! (where 100 is enemy.widht/2)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
-						elapsed = 0;
 						
 						break;
 				}
+				
+				elapsed = 0;
+				
 			}
 		}
 	}
