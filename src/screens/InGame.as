@@ -144,21 +144,11 @@ package screens
 		private function obstacleCheck():void
 		{
 			var obstacleToTrack:Obstacle;
-			if (hit)
+			if (hit)	// we do not need invincibility coldown for this game!
 			{
-				if (invincibleTimer == 0)
-				{
-					hitpoints = hitpoints - 10;
-					trace("HP="+hitpoints);
-				}
-				
-				invincibleTimer++;
-				
-				if (invincibleTimer == 10)	// invincibleTimer must be exactly the number of frames cat goes through an item
-				{        
-					hit = false;                    
-					invincibleTimer = 0;
-				}
+				hitpoints = hitpoints - 10;
+				trace("HP=" + hitpoints);
+				hit = false;
 			}
 			
 			if (obstaclesToAnimate.length > 0)   
