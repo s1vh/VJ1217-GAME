@@ -31,11 +31,11 @@ package screens
 		
 		private var gameState:String;
 		private var playerSpeed:Number;
-		private var hitObstacle:Number = 0;
+		//private var hitObstacle:Number = 0;
 		private const MIN_SPEED:Number = 650;
 		
-		private var scoreDistance:int;
-		private var obstacleGapCount:int;
+		//private var scoreDistance:int;
+		//private var obstacleGapCount:int;
 		private var hit:Boolean = false;
 		
 		private var touch:Touch;
@@ -43,6 +43,7 @@ package screens
 		private var touchY:Number;
 		
 		private var hitpoints:int = 100;
+		public var score:int = 0;
 		
 		public function InGame()
 		{
@@ -59,8 +60,8 @@ package screens
 		private function drawGame():void
 		{
 			cat = new Cat();
-			cat.x = stage.stageWidth/2;
-			cat.y = stage.stageHeight/2;
+			cat.x = stage.stageWidth / 2;
+			cat.y = stage.stageHeight / 2;
 			this.addChild(cat);
 		}
 		
@@ -74,14 +75,14 @@ package screens
 			this.visible = true;
 			
 			cat.x = -stage.stageWidth;
-			cat.y = stage.stageHeight * 0.5;
+			cat.y = stage.stageHeight / 2;
 			
 			gameState = "idle";
 			playerSpeed = 0;
-			hitObstacle = 0;
-			touchY = stage.stageHeight * 0.5;
-			scoreDistance = 0;
-			obstacleGapCount = 0;
+			//hitObstacle = 0;
+			touchY = stage.stageHeight / 2;
+			//scoreDistance = 0;
+			//obstacleGapCount = 0;
 			
 			launchCat();
 		}
@@ -107,8 +108,7 @@ package screens
 			
 			switch(gameState)
 			{
-				case "idle":
-					// Take off
+				case "idle":	// TAKE OFF
 					
 					if (cat.x < stage.stageWidth * 0.5 * 0.5)
 					{
@@ -125,21 +125,19 @@ package screens
 					
 					break;
 					
-				case "flying":
-					elapsed++;
+				case "flying":	// game is runing
 					
-					if (hitObstacle <= 0)
-					{
-						cat.y -= (cat.y - touchY) * 0.05;
+					cat.y -= (cat.y - touchY) * 0.05;
 							
-						if (-(cat.y - touchY) < cat.height/2 && - (cat.y - touchY) > - cat.height/2)
-						{
-							cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
-						}
+					if (-(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
+					{
+						cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
+					}
 					
 					obstacleCreate();
 					obstacleCheck();
-					}
+					
+					elapsed++;
 			}
 		}
 		
@@ -156,7 +154,7 @@ package screens
 				
 				invincibleTimer++;
 				
-				if (invincibleTimer == 10)
+				if (invincibleTimer == 10)	// invincibleTimer must be exactly the number of frames cat goes through an item
 				{        
 					hit = false;                    
 					invincibleTimer = 0;
@@ -165,52 +163,59 @@ package screens
 			
 			if (obstaclesToAnimate.length > 0)   
 			{
-				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
+				for (var ind:uint = 0; ind < obstaclesToAnimate.length; ind++)
 				{
-					obstacleToTrack = obstaclesToAnimate[i]
+					obstacleToTrack = obstaclesToAnimate[ind]
 					
 					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
 					{
 						switch(obstacleToTrack.type)
 						{
-						
-						case 1:
-						case 2:
-							hit = true;
-							break;
-								
-						case 3:                     
-							timeCurrent -= 1     
-							timeCurrent = Math.max(timeCurrent, 0);
-							break;
+							// ENEMY COLLISION
+							case 1:
+							case 2:
+								hit = true;
+								break;
 							
+							// STAR COLLISION
+							case 3:
+								if (timeCurrent > 0)
+								{
+									hitpoints++;
+									score++;
+									trace(score);
+									
+									timeCurrent -= 1;
+								}
+							
+							break;
 						}
 						
-						
-						obstaclesToAnimate.splice(i, 1);
+						obstaclesToAnimate.splice(ind, 1);
 						this.removeChild(obstacleToTrack);
 						
 					}
 					
-					if (obstacleToTrack.x < -(obstacleToTrack.width / 2)) {
-						
-						obstaclesToAnimate.splice(i, 1);
+					if (obstacleToTrack.x < -(obstacleToTrack.width / 2))
+					{	
+						obstaclesToAnimate.splice(ind, 1);
 						this.removeChild(obstacleToTrack);
-						
 					}
+					
 				}
 			}
 		}
 		
-		private function obstacleCreate():void {
+		private function obstacleCreate():void
+		{
 			
 			var obstacleCreated:Obstacle;
 			var type:int;
 			var starNum:int;
 			var preY:int;
-			//var preX:int = stage.stageWidth;
 			
-			if (elapsed == timeCurrent + 20) {
+			if (elapsed == timeCurrent + 50)
+			{
 			
 				type = 1 + Math.floor(Math.random() * 9);	// ésto devuelve un random de 1 a 10
 				
@@ -221,19 +226,20 @@ package screens
 					case 2:
 					case 3:
 					case 4:
+						
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = 100 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 100 is enemy.height/2 and 700 is stage.stageHeight - enemy.height/2)
-						while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
+						obstacleCreated.y = 200 / 2 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 200 is enemy.height and 700 is stage.stageHeight - enemy.height/2)
+						while (prevMinY - 200 / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + 200 / 2)
 						{
-							obstacleCreated.y = 100 + Math.floor(Math.random() * 700);
+							obstacleCreated.y =200 / 2 + Math.floor(Math.random() * 700);
 						}
 						
-						prevMinY = obstacleCreated.y - 100;	// MAGIC NUMBERS !!
-						prevMaxY = obstacleCreated.y + 100;	// MAGIC NUMBERS !!
+						prevMinY = obstacleCreated.y - 200 / 2;	// MAGIC NUMBERS !!
+						prevMaxY = obstacleCreated.y + 200 / 2;	// MAGIC NUMBERS !!
 						//trace("BLOCKED RANGE: " + prevMinY + "-" + prevMaxY)
 						
-						obstacleCreated.x = stage.stageWidth + 100;	// // MAGIC NUMBERS !! (where 100 is enemy.widht/2)
+						obstacleCreated.x = stage.stageWidth + 200 / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						elapsed = 0;
@@ -245,10 +251,11 @@ package screens
 					case 5:	
 					case 6:
 					case 7:
+						
 						// this is the STAR
 						starNum = 1 + Math.floor(Math.random() * 4);	// ésto devuelve un random de 1 a 5
 						preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));	// MAGIC NUMBERS !! 150 = star.width & .height
-						while (prevMinY < preY && preY < prevMaxY)
+						while (prevMinY - 150 / 2 < preY && preY < prevMaxY + 150 / 2)
 						{
 							preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
 						}
@@ -259,7 +266,7 @@ package screens
 							
 							obstacleCreated.y = preY;
 							
-							obstacleCreated.x = Math.floor((stage.stageWidth + starNum * 150/2));
+							obstacleCreated.x = Math.floor((stage.stageWidth + starNum * 150 / 2));
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 							
@@ -275,8 +282,9 @@ package screens
 					case 8:
 					case 9:	
 					case 10:
+						
 						// this is the RED ENEMY
-						if (redAvailable)
+						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
 							obstacleCreated = new Obstacle(2);
 							obstacleCreated.y = 200 + Math.floor(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
