@@ -208,7 +208,7 @@ package screens
 			var type:int;
 			var starNum:int;
 			var preY:int;
-			var preX:int = stage.stageWidth;
+			//var preX:int = stage.stageWidth;
 			
 			if (elapsed == timeCurrent + 20) {
 			
@@ -249,16 +249,16 @@ package screens
 						starNum = 1 + Math.floor(Math.random() * 4);	// ésto devuelve un random de 1 a 5
 						preY = Math.random() * stage.stageHeight;
 
-						for (var i:uint = 1; i <= starNum; i++)
+						for (var ind:uint = 1; ind <= starNum; ind++)
 						{
 							obstacleCreated = new Obstacle(3);
 							
-							if (i == 1)
+							if (ind == 1)
 							{
 								while (preY - obstacleCreated.height / 2 < prevMinY && preY + obstacleCreated.height / 2 > prevMaxY && preY + obstacleCreated.height / 2 > stage.stageHeight && preY - obstacleCreated.height / 2 < 0)	//Aqui está el ultimo problema por solucionar, y que probablemente debido a que los sprites no estan como toca, no soy capaz de que funcione. Te dejo el resto a ti <3
 								{
 									preY = Math.floor(Math.random() * stage.stageHeight) +1;
-									trace("eh");
+									//trace("eh");
 								}
 								
 								obstacleCreated.y = preY;
@@ -269,9 +269,12 @@ package screens
 								obstacleCreated.y = preY;
 							}
 							
-							obstacleCreated.x = (1 + i/30) * preX;
+							obstacleCreated.x = (stage.stageWidth + ind * 150 * 2/3);	// MAGIC NUMBERS !! 150 = star.width & .height
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
+							
+							prevMinY = obstacleCreated.y - Math.floor(150/2);	// MAGIC NUMBERS !!
+							prevMaxY = obstacleCreated.y + Math.floor(150/2);	// MAGIC NUMBERS !!
 						}
 						
 						prevMaxY = preY - obstacleCreated.height / 2;
