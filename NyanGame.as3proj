@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\PlaceHolder.swf" />
+    <movie path="bin\NyanGame.swf" />
     <movie fps="60" />
     <movie width="1280" />
     <movie height="800" />
