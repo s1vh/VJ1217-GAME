@@ -240,7 +240,7 @@ package screens
 			var starNum:int;
 			var preY:int;
 			
-			if (elapsed == spawnDelay)
+			if (elapsed >= spawnDelay)
 			{
 				
 				type = 1 + Math.floor(Math.random() * 9);	// ésto devuelve un random de 1 a 10
