@@ -8,25 +8,25 @@ package
 	
 	public class Assets
 	{
-		[Embed(source = "../media/graphics/cat0000.png")]
-		public static const cat:Class;
-		
-		[Embed(source = "../media/graphics/star0000.png")]
-		public static const sprite3:Class;
-		
-		[Embed(source = "../media/graphics/destructor0000.png")]
-		public static const sprite2:Class;
-		
-		[Embed(source = "../media/graphics/invader0000.png")]
-		public static const sprite1:Class;
-		
-		[Embed(source = "../media/graphics/empezarplaceholder.png")]
-		public static const empezar:Class;
-		
-		[Embed(source = "../media/graphics/tituloplaceholder.png")]
-		public static const titulo:Class;
 		
 		private static var gameTextures:Dictionary = new Dictionary();
+		private static var gameTextureAtlas:TextureAtlas;
+		private static var welcomeTextureAtlas:TextureAtlas;
+		
+		[Embed(source = "../media/graphics/welcomeScreen_sheet.png")]
+		public static const AtlasTextureWelcome:Class;
+		
+		[Embed(source = "../media/graphics/star0000.png")]
+		public static const star:Class;
+		
+		[Embed(source = "../media/graphics/welcomeScreen_sheet.xml", mimeType="application/octet-stream")]
+		public static const AtlasXmlWelcome:Class;
+		
+		[Embed(source = "../media/graphics/gameSprites_sheet.png")]
+		public static const AtlasTextureGame:Class;
+		
+		[Embed(source = "../media/graphics/gameSprites_sheet.xml", mimeType="application/octet-stream")]
+		public static const AtlasXmlGame:Class;
 		
 		public static function getTexture(name:String):Texture
 		{
@@ -36,6 +36,28 @@ package
 				gameTextures[name] = Texture.fromBitmap(bitmap);
 			}
 			return gameTextures[name];
+		}
+		
+		public static function getAtlas():TextureAtlas
+		{
+			if (gameTextureAtlas == null)
+			{
+				var texture:Texture = getTexture("AtlasTextureGame");
+				var xml:XML = XML(new AtlasXmlGame());
+				gameTextureAtlas = new TextureAtlas(texture, xml);
+			}
+			return gameTextureAtlas;
+		}
+		
+		public static function getWelcomeAtlas():TextureAtlas
+		{
+			if (welcomeTextureAtlas == null)
+			{
+				var texture:Texture = getTexture("AtlasTextureWelcome");
+				var xml:XML = XML(new AtlasXmlWelcome());
+				welcomeTextureAtlas = new TextureAtlas(texture, xml);
+			}
+			return welcomeTextureAtlas;
 		}
 	}
 }

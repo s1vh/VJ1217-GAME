@@ -11,6 +11,7 @@ package screens
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
+	import events.NavigationEvent;
 	
 	import starling.utils.deg2rad;
 	
@@ -23,6 +24,8 @@ package screens
 		private var prevMinY:int = 800;
 		private var prevMaxY:int = 0;
 		private var redAvailable:Boolean = true;
+		private var crashDuration:int = 0;
+		private var crashed:Boolean = false;
 		
 		private var spawnDelay:Number = 100;
 		private var elapsed:Number = 0;
@@ -113,12 +116,17 @@ package screens
 					
 					break;
 					
-				case "flying":	// game is runing
+				case "flying":	// game is running
 					
 					catMoving();
 					obstacleCreate();
 					obstacleCheck();
-					
+					if (crashed == true) crashDuration++;
+					if (crashDuration == 60) {
+						cat.disposeCrashArt();
+						crashed = false;
+						crashDuration = 0;
+					}
 					elapsed++;
 					
 					break;
@@ -128,7 +136,7 @@ package screens
 					// we should trigger a Game Over screen here, showing the score					
 					trace("GAME OVER");
 					trace("final score = " + score);
-					
+					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					break;
 			}
 		}
@@ -147,9 +155,10 @@ package screens
 		{
 			var obstacleToTrack:Obstacle;
 			
-			if (hit)	// we do not need invincibility coldown for this game!
+			if (hit)	// we do not need invincibility cooldown for this game!
 			{
 				hit = false;
+				
 				
 				if (hitpoints - 10 > 0)
 				{
@@ -192,6 +201,8 @@ package screens
 							case 2:
 								
 								hit = true;
+								cat.disposeCatArt();
+								crashed = true;
 								break;
 							
 							// STAR COLLISION

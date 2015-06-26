@@ -9,7 +9,7 @@ package objects
 	
 	public class Obstacle extends starling.display.Sprite
 	{
-		private var obstacleArt:Image;
+		private var obstacleArt:MovieClip;
 		private var obstacleType:int;
 		private var difficulty:int;
 		private var currentDate:Date = new Date();
@@ -31,9 +31,20 @@ package objects
 		
 		private function createObstacleArt(spriteType:int):void
 		{
-			obstacleArt = new Image(Assets.getTexture("sprite"+spriteType));
+			switch(spriteType) {
+				case 1:
+					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("invader00"), 20);
+					break;
+				case 2:
+					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("destructor00"), 20);
+					break;
+				case 3:
+					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("star00"), 20);
+					break;
+			}
 			obstacleArt.x = Math.ceil(-obstacleArt.width/2);
-			obstacleArt.y = Math.ceil(-obstacleArt.height/2);
+			obstacleArt.y = Math.ceil(-obstacleArt.height / 2);
+			starling.core.Starling.juggler.add(obstacleArt);
 			this.addChild(obstacleArt);
 		}
 		

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
 <!-- $TexturePacker:SmartUpdate:d1dbfac458b4aabd53cc81c58b7465c4:f96d625f922e0d18c8156119a79a1b61:d773e65ed7420e462c0e065e2d859f54$ -->
-<TextureAtlas imagePath="welcomeScreen_sheet.atf">
+<TextureAtlas imagePath="welcomeScreen_sheet.png">
     <SubTexture name="welcome_cat" x="1284" y="2" width="420" height="558" frameX="0" frameY="-26" frameWidth="420" frameHeight="584"/>
     <SubTexture name="welcome_rainbow" x="2" y="2" width="1280" height="800"/>
     <SubTexture name="welcome_start" x="2" y="804" width="228" height="99" frameX="-97" frameY="0" frameWidth="440" frameHeight="108"/>

@@ -13,6 +13,8 @@ package screens
 	{
 		private var title:Image;
 		private var cat:Image;
+		private var rainbow:Image;
+		private var subtitle:Image;
 		
 		private var playBtn:Button;
 		
@@ -31,20 +33,30 @@ package screens
 		
 		private function drawScreen():void
 		{
-			title = new Image(Assets.getTexture("titulo"));
+			rainbow = new Image(Assets.getWelcomeAtlas().getTexture("welcome_rainbow"));
+			rainbow.x = 0;
+			rainbow.y = 0;
+			this.addChild(rainbow);
+			
+			subtitle = new Image(Assets.getWelcomeAtlas().getTexture("welcome_super"));
+			subtitle.x = 400;
+			subtitle.y = 10;
+			this.addChild(subtitle);
+			
+			title = new Image(Assets.getWelcomeAtlas().getTexture("welcome_title"));
 			title.x = 440;
 			title.y = 20;
 			this.addChild(title);
 			
-			playBtn = new Button(Assets.getTexture("empezar"));
-			playBtn.x = 500;
-			playBtn.y = 260;
+			playBtn = new Button(Assets.getWelcomeAtlas().getTexture("welcome_start"));
+			playBtn.x = 440;
+			playBtn.y = 500;
 			this.addChild(playBtn);
 			
-			cat = new Image(Assets.getTexture("cat"));
+			cat = new Image(Assets.getWelcomeAtlas().getTexture("welcome_cat"));
+			cat.x = 0;
+			cat.y = 200;
 			this.addChild(cat);
-			cat.x = -cat.width;
-			cat.y = 100;
 			
 			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
 		}
@@ -61,28 +73,14 @@ package screens
 		public function disposeTemporarily():void
 		{
 			this.visible = false;
-			
-			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, heroAnimation);
 		}
 		
 		public function initialize():void
 		{
 			this.visible = true;
-			
-			cat.x = -cat.width;
-			cat.y = 100;
-			
-			TweenLite.to(cat, 2, { x: 80 } );
-			
-			this.addEventListener(Event.ENTER_FRAME, heroAnimation);
 		}
 		
-		private function heroAnimation(event:starling.events.Event):void
-		{
-			var currentDate:Date = new Date();
-			cat.y = 100 + (Math.cos(currentDate.getTime() * 0.002) * 100);
-			playBtn.y = 260 + (Math.cos(currentDate.getTime() * 0.002) * 10);
-		}
+		
 	}
 	
 }

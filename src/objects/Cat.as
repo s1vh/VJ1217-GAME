@@ -8,7 +8,8 @@ package objects
 	
 	public class Cat extends starling.display.Sprite
 	{
-		private var catArt:Image;
+		private var catArt:MovieClip;
+		private var crashArt:MovieClip;
 		
 		public function Cat()
 		{
@@ -24,10 +25,32 @@ package objects
 		
 		private function createCatArt():void
 		{
-			catArt = new Image(Assets.getTexture("cat"));
+			crashArt = new MovieClip(Assets.getAtlas().getTextures("cat_hit00"), 20);
+			crashArt.x = Math.ceil(-crashArt.width/2);
+			crashArt.y = Math.ceil( -crashArt.height / 2);
+			starling.core.Starling.juggler.add(crashArt);
+			crashArt.visible = false;
+			this.addChild(crashArt);
+			
+			catArt = new MovieClip(Assets.getAtlas().getTextures("cat00"),20);
 			catArt.x = Math.ceil(-catArt.width/2);
-			catArt.y = Math.ceil(-catArt.height/2);
+			catArt.y = Math.ceil( -catArt.height / 2);
+			starling.core.Starling.juggler.add(catArt);
 			this.addChild(catArt);
 		}
+		
+		public function disposeCatArt():void
+		{
+			catArt.visible = false;
+			crashArt.visible = true;
+		}
+		
+		public function disposeCrashArt():void
+		{
+			crashArt.visible = false;
+			catArt.visible = true;
+		}
+		
+		
 	}
 }
