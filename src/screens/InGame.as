@@ -23,20 +23,20 @@ package screens
 		private var prevMinY:int = 800;
 		private var prevMaxY:int = 0;
 		private var redAvailable:Boolean = true;
-		private var invincibleTimer:int = 0;
 		
-		private var timePrevious:Number;
-		private var timeCurrent:Number = 50;
+		//private var timePrevious:Number;
+		private var spawnDelay:Number = 100;
 		private var elapsed:Number = 0;
 		
 		private var gameState:String;
-		private var playerSpeed:Number;
+		//private var playerSpeed:Number;
 		//private var hitObstacle:Number = 0;
-		private const MIN_SPEED:Number = 650;
+		//private const MIN_SPEED:Number = 650;
 		
 		//private var scoreDistance:int;
 		//private var obstacleGapCount:int;
 		private var hit:Boolean = false;
+		private var collect:Boolean = false;
 		
 		private var touch:Touch;
 		private var touchX:Number;
@@ -78,7 +78,7 @@ package screens
 			cat.y = stage.stageHeight / 2;
 			
 			gameState = "idle";
-			playerSpeed = 0;
+			//playerSpeed = 0;
 			//hitObstacle = 0;
 			touchY = stage.stageHeight / 2;
 			//scoreDistance = 0;
@@ -110,12 +110,10 @@ package screens
 			{
 				case "idle":	// TAKE OFF
 					
-					if (cat.x < stage.stageWidth * 0.5 * 0.5)
+					if (cat.x < stage.stageWidth / 5)
 					{
-						cat.x += ((stage.stageWidth * 0.5 * 0.5 + 10) - cat.x) * 0.05;
-						cat.y = stage.stageHeight * 0.5;
-						
-						playerSpeed += (MIN_SPEED - playerSpeed) * 0.05;	
+						cat.x += ((stage.stageWidth / 4 + 10) - cat.x) / 15;
+						cat.y = stage.stageHeight / 2;
 					}
 					
 					else
@@ -127,28 +125,66 @@ package screens
 					
 				case "flying":	// game is runing
 					
-					cat.y -= (cat.y - touchY) * 0.05;
-							
-					if (-(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
-					{
-						cat.rotation = deg2rad(-(cat.y - touchY) * 0.2);
-					}
-					
+					catMoving();
 					obstacleCreate();
 					obstacleCheck();
 					
 					elapsed++;
+					
+					break;
+					
+				case "gameOver":
+					
+					// we should trigger a Game Over screen here, showing the score					
+					trace("GAME OVER");
+					trace("final score = " + score);
+					
+					break;
+			}
+		}
+		
+		private function catMoving():void
+		{
+			cat.y -= (cat.y - touchY) / 20;
+			
+			if ( -(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
+			{
+				cat.rotation = deg2rad(-(cat.y - touchY) / 4);
 			}
 		}
 		
 		private function obstacleCheck():void
 		{
 			var obstacleToTrack:Obstacle;
+			
 			if (hit)	// we do not need invincibility coldown for this game!
 			{
-				hitpoints = hitpoints - 10;
-				trace("HP=" + hitpoints);
 				hit = false;
+				
+				if (hitpoints - 10 > 0)
+				{
+					hitpoints = hitpoints - 10;
+					trace(hitpoints + "HP");
+				}
+				
+				else
+				{
+					gameState = "gameOver";
+				}
+				
+			}
+			
+			if (collect)
+			{
+				collect = false;
+				
+				if (hitpoints < 100)
+				{
+					hitpoints++;
+				}
+				
+				score++;
+				trace(score);
 			}
 			
 			if (obstaclesToAnimate.length > 0)   
@@ -164,21 +200,21 @@ package screens
 							// ENEMY COLLISION
 							case 1:
 							case 2:
+								
 								hit = true;
 								break;
 							
 							// STAR COLLISION
 							case 3:
-								if (timeCurrent > 0)
+								
+								collect = true;
+								if (spawnDelay > 50)
 								{
-									hitpoints++;
-									score++;
-									trace(score);
-									
-									timeCurrent -= 1;
+									spawnDelay--;
+									//trace(spawnDelay);
 								}
-							
-							break;
+								
+								break;
 						}
 						
 						obstaclesToAnimate.splice(ind, 1);
@@ -204,7 +240,7 @@ package screens
 			var starNum:int;
 			var preY:int;
 			
-			if (elapsed == timeCurrent + 50)
+			if (elapsed == spawnDelay)
 			{
 				
 				type = 1 + Math.floor(Math.random() * 9);	// ésto devuelve un random de 1 a 10
@@ -222,6 +258,7 @@ package screens
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
 						obstacleCreated.y = 200 / 2 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 200 is enemy.height and 700 is stage.stageHeight - enemy.height/2)
+						
 						while (prevMinY - 200 / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + 200 / 2)
 						{
 							obstacleCreated.y =200 / 2 + Math.floor(Math.random() * 700);
@@ -309,16 +346,14 @@ package screens
 						}
 						
 						//trace("BLOCKED RANGE: " + prevMinY + "-" + prevMaxY)
-						
 						obstacleCreated.x = stage.stageWidth + 100;	// // MAGIC NUMBERS !! (where 100 is enemy.widht/2)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						
 						break;
 				}
-				
+					
 				elapsed = 0;
-				
 			}
 		}
 	}
