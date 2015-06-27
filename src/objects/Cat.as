@@ -26,14 +26,14 @@ package objects
 		private function createCatArt():void
 		{
 			crashArt = new MovieClip(Assets.getAtlas().getTextures("cat_hit00"), 20);
-			crashArt.x = Math.ceil(-crashArt.width/2);
+			crashArt.x = Math.ceil(-crashArt.width / 2);
 			crashArt.y = Math.ceil( -crashArt.height / 2);
 			starling.core.Starling.juggler.add(crashArt);
 			crashArt.visible = false;
 			this.addChild(crashArt);
 			
-			catArt = new MovieClip(Assets.getAtlas().getTextures("cat00"),20);
-			catArt.x = Math.ceil(-catArt.width/2);
+			catArt = new MovieClip(Assets.getAtlas().getTextures("cat00"), 20);
+			catArt.x = Math.ceil(-catArt.width / 2);
 			catArt.y = Math.ceil( -catArt.height / 2);
 			starling.core.Starling.juggler.add(catArt);
 			this.addChild(catArt);

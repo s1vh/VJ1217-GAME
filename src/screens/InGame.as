@@ -71,6 +71,11 @@ package screens
 		{
 			this.visible = true;
 			
+			// RESET VARIABLES
+			hitpoints = 100;
+			score = 0;
+			spawnDelay = 100;
+			
 			cat.x = -stage.stageWidth;
 			cat.y = stage.stageHeight / 2;
 			
@@ -121,22 +126,25 @@ package screens
 					catMoving();
 					obstacleCreate();
 					obstacleCheck();
-					if (crashed == true) crashDuration++;
-					if (crashDuration == 60) {
-						cat.disposeCrashArt();
-						crashed = false;
-						crashDuration = 0;
+					
+					if (crashed)
+					{
+						crashDuration++;
+						
+						if (crashDuration == 60)	// (we have 21 frames of cat crash animation)
+						{
+							crashDuration = 0;
+							crashed = false;
+							cat.disposeCrashArt();
+						}
 					}
+					
 					elapsed++;
 					
 					break;
 					
 				case "gameOver":
 					
-					// we should trigger a Game Over screen here, showing the score					
-					trace("GAME OVER");
-					trace("final score = " + score);
-					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					break;
 			}
 		}
@@ -159,15 +167,20 @@ package screens
 			{
 				hit = false;
 				
-				
 				if (hitpoints - 10 > 0)
 				{
 					hitpoints = hitpoints - 10;
+					crashed = true;
+					cat.disposeCatArt();
 					trace(hitpoints + "HP");
 				}
 				
 				else
 				{
+					// we should trigger a Game Over screen here, showing the score
+					trace("GAME OVER");
+					trace("final score: " + score);
+					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					gameState = "gameOver";
 				}
 				
@@ -200,9 +213,13 @@ package screens
 							case 1:
 							case 2:
 								
-								hit = true;
-								cat.disposeCatArt();
-								crashed = true;
+								if (crashed == false)
+								{
+									hit = true;
+									//crashed = true;
+									//cat.disposeCatArt();
+								}
+								
 								break;
 							
 							// STAR COLLISION

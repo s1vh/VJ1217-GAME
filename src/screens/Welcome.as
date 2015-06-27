@@ -26,8 +26,6 @@ package screens
 		
 		private function onAddedToStage(event:starling.events.Event):void
 		{
-			
-			
 			drawScreen();
 		}
 		
