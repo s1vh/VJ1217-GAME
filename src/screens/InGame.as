@@ -24,11 +24,17 @@ package screens
 		private var prevMaxY:int = 0;
 		private var redAvailable:Boolean = true;
 		
+		//private var timePrevious:Number;
 		private var spawnDelay:Number = 100;
 		private var elapsed:Number = 0;
 		
 		private var gameState:String;
+		//private var playerSpeed:Number;
+		//private var hitObstacle:Number = 0;
+		//private const MIN_SPEED:Number = 650;
 		
+		//private var scoreDistance:int;
+		//private var obstacleGapCount:int;
 		private var hit:Boolean = false;
 		private var collect:Boolean = false;
 		
@@ -72,7 +78,11 @@ package screens
 			cat.y = stage.stageHeight / 2;
 			
 			gameState = "idle";
+			//playerSpeed = 0;
+			//hitObstacle = 0;
 			touchY = stage.stageHeight / 2;
+			//scoreDistance = 0;
+			//obstacleGapCount = 0;
 			
 			launchCat();
 		}
@@ -198,10 +208,10 @@ package screens
 							case 3:
 								
 								collect = true;
-								
 								if (spawnDelay > 50)
 								{
-									spawnDelay--;									
+									spawnDelay--;
+									//trace(spawnDelay);
 								}
 								
 								break;
@@ -224,6 +234,7 @@ package screens
 		
 		private function obstacleCreate():void
 		{
+			
 			var obstacleCreated:Obstacle;
 			var type:int;
 			var starNum:int;
@@ -255,6 +266,7 @@ package screens
 						
 						prevMinY = obstacleCreated.y - 200 / 2;	// MAGIC NUMBERS !!
 						prevMaxY = obstacleCreated.y + 200 / 2;	// MAGIC NUMBERS !!
+						//trace("BLOCKED RANGE: " + prevMinY + "-" + prevMaxY)
 						
 						obstacleCreated.x = stage.stageWidth + 200 / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
 						this.addChild(obstacleCreated);
@@ -293,7 +305,7 @@ package screens
 						redAvailable = true;
 						
 						break;	
-						
+					
 					case 8:
 					case 9:	
 					case 10:
@@ -333,6 +345,7 @@ package screens
 							redAvailable = true;
 						}
 						
+						//trace("BLOCKED RANGE: " + prevMinY + "-" + prevMaxY)
 						obstacleCreated.x = stage.stageWidth + 100;	// // MAGIC NUMBERS !! (where 100 is enemy.widht/2)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
