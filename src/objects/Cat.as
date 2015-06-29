@@ -25,7 +25,7 @@ package objects
 		
 		private function createCatArt():void
 		{
-			crashArt = new MovieClip(Assets.getAtlas().getTextures("cat_hit00"), 20);
+			crashArt = new MovieClip(Assets.getAtlas().getTextures("cat_hit00"), 21);
 			crashArt.x = Math.ceil(-crashArt.width / 2);
 			crashArt.y = Math.ceil( -crashArt.height / 2);
 			starling.core.Starling.juggler.add(crashArt);
@@ -50,7 +50,9 @@ package objects
 			crashArt.visible = false;
 			catArt.visible = true;
 		}
-		
+		public function getArt():Image {
+			 return catArt;
+		}
 		
 	}
 }

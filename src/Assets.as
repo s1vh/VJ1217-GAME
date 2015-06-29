@@ -2,7 +2,8 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.utils.Dictionary;
-	
+	import starling.text.BitmapFont;
+	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
@@ -27,6 +28,42 @@ package
 		
 		[Embed(source = "../media/graphics/gameSprites_sheet.xml", mimeType="application/octet-stream")]
 		public static const AtlasXmlGame:Class;
+		
+		[Embed(source="../media/Fonts/NyanImpact24/NyanImpact24.png")]
+		public static const Font24Texture:Class;
+		
+		[Embed(source="../media/fonts/NyanImpact24/NyanImpact24.fnt", mimeType="application/octet-stream")]
+		public static const Font24XML:Class;
+		
+		[Embed(source="../media/Fonts/NyanImpact48/NyanImpact48.png")]
+		public static const Font48Texture:Class;
+		
+		[Embed(source="../media/fonts/NyanImpact48/NyanImpact48.fnt", mimeType="application/octet-stream")]
+		public static const Font48XML:Class;
+		
+		public static var myFont:BitmapFont;
+		
+		public static function get24Font():BitmapFont
+		{
+			var fontTexture:Texture = Texture.fromBitmap(new Font24Texture());
+			var fontXML:XML = XML(new Font24XML());
+			
+			var font:BitmapFont = new BitmapFont(fontTexture, fontXML);
+			TextField.registerBitmapFont(font);
+			
+			return font;
+		}
+		
+		public static function get48Font():BitmapFont
+		{
+			var fontTexture:Texture = Texture.fromBitmap(new Font48Texture());
+			var fontXML:XML = XML(new Font48XML());
+			
+			var font:BitmapFont = new BitmapFont(fontTexture, fontXML);
+			TextField.registerBitmapFont(font);
+			
+			return font;
+		}
 		
 		public static function getTexture(name:String):Texture
 		{

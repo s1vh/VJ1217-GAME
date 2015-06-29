@@ -3,6 +3,12 @@ package screens
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	import objects.Obstacle;
+	import starling.core.Starling;
+	import starling.display.Image;
+	import starling.display.MovieClip;
+	import starling.text.TextField;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
 		
 	import objects.Cat;
 		
@@ -21,11 +27,15 @@ package screens
 		private var obstacle:Obstacle;
 		private var enemigoCreado:int = 0;
 		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
+		private var rainbowVector:Vector.<Image> = new Vector.<Image>();
+		private var rainbowCreated:Image;
+		private var rainbowCheck:Image;
 		private var prevMinY:int = 800;
 		private var prevMaxY:int = 0;
 		private var redAvailable:Boolean = true;
 		private var crashDuration:int = 0;
 		private var crashed:Boolean = false;
+		private var star:MovieClip;
 		
 		private var spawnDelay:Number = 100;
 		private var elapsed:Number = 0;
@@ -41,6 +51,7 @@ package screens
 		
 		private var hitpoints:int = 100;
 		public var score:int = 0;
+		private var scoreText:TextField;
 		
 		public function InGame()
 		{
@@ -56,10 +67,31 @@ package screens
 		
 		private function drawGame():void
 		{
+			for ( var i:uint = 0; i < 50; i++) {
+				rainbowCreated = new Image(Assets.getAtlas().getTexture("RbSegment"));
+				rainbowVector.push(rainbowCreated);
+				rainbowCreated.y = 402;
+				rainbowCreated.x = 0 + (rainbowCreated.width * i);
+				this.addChild(rainbowCreated);
+			}
 			cat = new Cat();
 			cat.x = stage.stageWidth / 2;
 			cat.y = stage.stageHeight / 2;
 			this.addChild(cat);
+			
+			scoreText = new TextField(100, 100, "0", Assets.get24Font().name, 24, 0xffffff);
+			scoreText.hAlign = HAlign.LEFT;
+			scoreText.vAlign = VAlign.TOP;
+			star = new MovieClip(Assets.getAtlas().getTextures("token00"), 26);
+			star.y = 10;
+			star.x = 150 - star.width;
+			Starling.juggler.add(star);
+			this.addChild(star);
+			scoreText.x = 150;
+			scoreText.y = 20;
+			scoreText.border = false;
+			scoreText.height = scoreText.textBounds.height + 10;
+			this.addChild(scoreText);
 		}
 		
 		public function disposeTemporarily():void
@@ -75,10 +107,8 @@ package screens
 			hitpoints = 100;
 			score = 0;
 			spawnDelay = 100;
-			
 			cat.x = -stage.stageWidth;
-			cat.y = stage.stageHeight / 2;
-			
+			cat.y = (stage.stageHeight / 2) + 2;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			
@@ -131,7 +161,7 @@ package screens
 					{
 						crashDuration++;
 						
-						if (crashDuration == 60)	// (we have 21 frames of cat crash animation)
+						if (crashDuration == 63)	// (we have 21 frames of cat crash animation) if I put 21, the animation will last only 1 second
 						{
 							crashDuration = 0;
 							crashed = false;
@@ -152,7 +182,7 @@ package screens
 		private function catMoving():void
 		{
 			cat.y -= (cat.y - touchY) / 20;
-			
+			updateRainbow();
 			if ( -(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
 			{
 				cat.rotation = deg2rad(-(cat.y - touchY) / 4);
@@ -170,6 +200,7 @@ package screens
 				if (hitpoints - 10 > 0)
 				{
 					hitpoints = hitpoints - 10;
+					updateRainbow();
 					crashed = true;
 					cat.disposeCatArt();
 					trace(hitpoints + "HP");
@@ -192,11 +223,12 @@ package screens
 				
 				if (hitpoints < 100)
 				{
+					updateRainbow();
 					hitpoints++;
 				}
 				
 				score++;
-				trace(score);
+				scoreText.text = score.toString();
 			}
 			
 			if (obstaclesToAnimate.length > 0)   
@@ -369,6 +401,13 @@ package screens
 				}
 					
 				elapsed = 0;
+			}
+		}
+		private function updateRainbow():void {
+			for (var i:uint = 0; i < rainbowVector.length; i++) {
+				rainbowCheck = rainbowVector[i];
+				rainbowCheck.scaleY = 0.01 * hitpoints;
+				rainbowCheck.y -= ((rainbowCheck.y - touchY)/20) + 2;
 			}
 		}
 	}

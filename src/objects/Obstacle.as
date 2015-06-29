@@ -64,7 +64,7 @@ package objects
 			return obstacleType;
 		}
 		
-		public function set speed(_speed:int):void {
+		public function setSpeed(_speed:int):void {
 				this.difficulty = _speed;
 		}
 	}
