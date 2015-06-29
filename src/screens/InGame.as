@@ -306,17 +306,17 @@ package screens
 						
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = 200 / 2 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 200 is enemy.height and 700 is stage.stageHeight - enemy.height/2)
+						obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * stage.stageHeight - (obstacleCreated.height/2));	// MAGIC NUMBERS !! (where 200 is enemy.height and 700 is stage.stageHeight - enemy.height/2)
 						
-						while (prevMinY - 200 / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + 200 / 2)
+						while (prevMinY - obstacleCreated.height / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.height / 2)
 						{
-							obstacleCreated.y =200 / 2 + Math.floor(Math.random() * 700);
+							obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * 700);
 						}
 						
-						prevMinY = obstacleCreated.y - 200 / 2;	// MAGIC NUMBERS !!
-						prevMaxY = obstacleCreated.y + 200 / 2;	// MAGIC NUMBERS !!
+						prevMinY = obstacleCreated.y - obstacleCreated.height / 2;	// MAGIC NUMBERS !!
+						prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;	// MAGIC NUMBERS !!
 						
-						obstacleCreated.x = stage.stageWidth + 200 / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						
@@ -370,8 +370,10 @@ package screens
 								obstacleCreated.y = 200 + Math.floor(Math.random() * 600);
 							}
 							
-							prevMinY = obstacleCreated.y - 200;	// MAGIC NUMBERS !!
-							prevMaxY = obstacleCreated.y + 200;	// MAGIC NUMBERS !!
+							//prevMinY = obstacleCreated.y - 200;	// MAGIC NUMBERS !!
+							//prevMaxY = obstacleCreated.y + 200;	// MAGIC NUMBERS !!
+							prevMinY = obstacleCreated.y - (obstacleCreated.height/2);
+							prevMaxY = obstacleCreated.y + (obstacleCreated.height/2);
 							
 							redAvailable = false;
 						}
@@ -381,19 +383,21 @@ package screens
 							trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
-							obstacleCreated.y = 100 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 100 is enemy.height/2 and 700 is stage.stageHeight - enemy.height/2)
+							//obstacleCreated.y = 100 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 100 is enemy.height/2 and 700 is stage.stageHeight - enemy.height/2)
+							obstacleCreated.y = (obstacleCreated.height/2) + Math.floor(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
 							{
 								obstacleCreated.y = 100 + Math.floor(Math.random() * 700);
 							}
 							
-							prevMinY = obstacleCreated.y - 100;	// MAGIC NUMBERS !!
-							prevMaxY = obstacleCreated.y + 100;	// MAGIC NUMBERS !!
-							
+							//prevMinY = obstacleCreated.y - 100;	// MAGIC NUMBERS !!
+							//prevMaxY = obstacleCreated.y + 100;	// MAGIC NUMBERS !!
+							prevMinY = obstacleCreated.y - obstacleCreated.height/2;
+							prevMaxY = obstacleCreated.y + obstacleCreated.height/2;
 							redAvailable = true;
 						}
 						
-						obstacleCreated.x = stage.stageWidth + 100;	// // MAGIC NUMBERS !! (where 100 is enemy.widht/2)
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width/2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						
@@ -407,7 +411,8 @@ package screens
 			for (var i:uint = 0; i < rainbowVector.length; i++) {
 				rainbowCheck = rainbowVector[i];
 				rainbowCheck.scaleY = 0.01 * hitpoints;
-				rainbowCheck.y -= ((rainbowCheck.y - touchY)/20) + 2;
+				rainbowCheck.y -= ((rainbowCheck.y - touchY)/20)+1;
+				
 			}
 		}
 	}
