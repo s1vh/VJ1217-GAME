@@ -37,8 +37,8 @@ package screens
 		private var crashed:Boolean = false;
 		private var star:MovieClip;
 		
-		private var spawnDelay:Number = 100;
-		private var elapsed:Number = 0;
+		private var spawnDelay:Number;
+		private var elapsed:Number;
 		
 		private var gameState:String;
 		
@@ -50,8 +50,8 @@ package screens
 		private var touchY:Number;
 		
 		private var scoreText:TextField;
-		private var hitpoints:int = 100;
-		public static var score:int = 0;
+		private var hitpoints:int;
+		public static var score:int;
 		
 		public dynamic function getScore():int
 		{
@@ -72,13 +72,15 @@ package screens
 		
 		private function drawGame():void
 		{
-			for ( var i:uint = 0; i < 50; i++) {
+			for ( var i:uint = 0; i < 50; i++)
+			{
 				rainbowCreated = new Image(Assets.getAtlas().getTexture("RbSegment"));
 				rainbowVector.push(rainbowCreated);
 				rainbowCreated.y = 402;
 				rainbowCreated.x = 0 + (rainbowCreated.width * i);
 				this.addChild(rainbowCreated);
 			}
+			
 			cat = new Cat();
 			cat.x = stage.stageWidth / 2;
 			cat.y = stage.stageHeight / 2;
@@ -99,6 +101,17 @@ package screens
 			this.addChild(scoreText);
 		}
 		
+		private function updateRainbow():void
+		{
+			for (var i:uint = 0; i < rainbowVector.length; i++)
+			{
+				rainbowCheck = rainbowVector[i];
+				rainbowCheck.scaleY = 0.01 * hitpoints;
+				rainbowCheck.y -= ((rainbowCheck.y - touchY) / 20) + 1;
+				
+			}
+		}
+		
 		public function disposeTemporarily():void
 		{
 			this.visible = false;
@@ -113,10 +126,13 @@ package screens
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
+			elapsed = 0;
 			cat.x = -stage.stageWidth;
 			cat.y = (stage.stageHeight / 2) + 2;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
+			
+			updateRainbow();	// it resets the rainbow height at the start
 			
 			// START
 			launchCat();
@@ -144,6 +160,8 @@ package screens
 			switch(gameState)
 			{
 				case "idle":	// TAKE OFF
+					
+					//updateRainbow();
 					
 					if (cat.x < stage.stageWidth / 5)
 					{
@@ -190,6 +208,7 @@ package screens
 		{
 			cat.y -= (cat.y - touchY) / 20;
 			updateRainbow();
+			
 			if ( -(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
 			{
 				cat.rotation = deg2rad(-(cat.y - touchY) / 4);
@@ -412,15 +431,6 @@ package screens
 				}
 					
 				elapsed = 0;
-			}
-		}
-		
-		private function updateRainbow():void {
-			for (var i:uint = 0; i < rainbowVector.length; i++) {
-				rainbowCheck = rainbowVector[i];
-				rainbowCheck.scaleY = 0.01 * hitpoints;
-				rainbowCheck.y -= ((rainbowCheck.y - touchY)/20)+1;
-				
 			}
 		}
 		

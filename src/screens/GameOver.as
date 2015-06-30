@@ -24,10 +24,24 @@ package screens
 		public function initialize():void
 		{
 			this.visible = true;
-			starBtn = new Button(Assets.getTexture("star"));
+			
+			if (starBtn == null)
+			{
+				starBtn = new Button(Assets.getTexture("star"));
+			}
+			
 			starBtn.x = (stage.stageWidth / 2) - 200;
 			starBtn.y = (stage.stageHeight / 2) - 100;
-			scoreText = new TextField(100, 100, InGame.score.toString(), Assets.get48Font().name, 48, 0xffffff); //if you know how to pass score into the game over screen, assign it to this score variable
+			
+			if (scoreText == null)
+			{
+				scoreText = new TextField(100, 100, InGame.score.toString(), Assets.get48Font().name, 48, 0xffffff);
+			}
+			else
+			{
+				scoreText.text = InGame.score.toString();
+			}
+			
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.y = starBtn.y + 55;

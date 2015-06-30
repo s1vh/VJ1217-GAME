@@ -72,6 +72,7 @@ package
 				var bitmap:Bitmap = new Assets[name]();
 				gameTextures[name] = Texture.fromBitmap(bitmap);
 			}
+			
 			return gameTextures[name];
 		}
 		
@@ -83,6 +84,7 @@ package
 				var xml:XML = XML(new AtlasXmlGame());
 				gameTextureAtlas = new TextureAtlas(texture, xml);
 			}
+			
 			return gameTextureAtlas;
 		}
 		
@@ -94,6 +96,7 @@ package
 				var xml:XML = XML(new AtlasXmlWelcome());
 				welcomeTextureAtlas = new TextureAtlas(texture, xml);
 			}
+			
 			return welcomeTextureAtlas;
 		}
 	}

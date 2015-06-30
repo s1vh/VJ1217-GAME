@@ -32,16 +32,20 @@ package objects
 		private function createObstacleArt(spriteType:int):void
 		{
 			switch(spriteType) {
+				
 				case 1:
 					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("invader00"), 20);
 					break;
+					
 				case 2:
 					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("destructor00"), 20);
 					break;
 				case 3:
+					
 					obstacleArt = new MovieClip(Assets.getAtlas().getTextures("star00"), 20);
 					break;
 			}
+			
 			obstacleArt.x = Math.ceil(-obstacleArt.width/2);
 			obstacleArt.y = Math.ceil(-obstacleArt.height / 2);
 			starling.core.Starling.juggler.add(obstacleArt);
@@ -60,12 +64,14 @@ package objects
 			
 		}
 		
-		public function get type():int {
+		public function get type():int
+		{
 			return obstacleType;
 		}
 		
-		public function setSpeed(_speed:int):void {
-				this.difficulty = _speed;
+		public function setSpeed(_speed:int):void
+		{
+			this.difficulty = _speed;
 		}
 	}
 }

@@ -78,7 +78,6 @@ package screens
 			this.visible = true;
 		}
 		
-		
 	}
 	
 }

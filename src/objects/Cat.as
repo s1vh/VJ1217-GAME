@@ -50,8 +50,10 @@ package objects
 			crashArt.visible = false;
 			catArt.visible = true;
 		}
-		public function getArt():Image {
-			 return catArt;
+		
+		public function getArt():Image
+		{
+			return catArt;
 		}
 		
 	}
