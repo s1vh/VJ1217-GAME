@@ -32,15 +32,15 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-      <path-element>C:\Users\Karrion\Desktop\VJ1217-GAME\src</path-element>
-      <path-element>C:\Users\Karrion\Downloads\FlashDevelop Plugins\Gamua-Starling-Framework-c414de1\starling\src</path-element>
-      <path-element>C:\Users\Karrion\Downloads\FlashDevelop Plugins\GreenSock-AS3</path-element>
-      <path-element>C:\Users\Karrion\Downloads\FlashDevelop Plugins\Hi-ReS-Stats-master\src</path-element>
+      <path-element>C:\Users\s1vh\Documents\UJI1415\JWEB\VJ1217-GAME\src</path-element>
+      <path-element>C:\_dev\Starling-Framework\starling\src</path-element>
+      <path-element>C:\_dev\Hi-ReS-Stats\src</path-element>
+      <path-element>C:\_dev\GreenSock-AS3\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
   </compiler>
   <file-specs>
-    <path-element>C:\Users\Karrion\Desktop\VJ1217-GAME\src\Main.as</path-element>
+    <path-element>C:\Users\s1vh\Documents\UJI1415\JWEB\VJ1217-GAME\src\Main.as</path-element>
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>60</default-frame-rate>

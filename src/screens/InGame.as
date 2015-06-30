@@ -49,9 +49,14 @@ package screens
 		private var touchX:Number;
 		private var touchY:Number;
 		
-		private var hitpoints:int = 100;
-		public var score:int = 0;
 		private var scoreText:TextField;
+		private var hitpoints:int = 100;
+		public static var score:int = 0;
+		
+		public dynamic function getScore():int
+		{
+			return score;
+		}
 		
 		public function InGame()
 		{
@@ -79,7 +84,7 @@ package screens
 			cat.y = stage.stageHeight / 2;
 			this.addChild(cat);
 			
-			scoreText = new TextField(100, 100, "0", Assets.get24Font().name, 24, 0xffffff);
+			scoreText = new TextField(100, 100, score.toString(), Assets.get24Font().name, 24, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
 			star = new MovieClip(Assets.getAtlas().getTextures("token00"), 26);
@@ -106,12 +111,14 @@ package screens
 			// RESET VARIABLES
 			hitpoints = 100;
 			score = 0;
+			scoreText.text = score.toString();
 			spawnDelay = 100;
 			cat.x = -stage.stageWidth;
 			cat.y = (stage.stageHeight / 2) + 2;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			
+			// START
 			launchCat();
 		}
 		
@@ -161,7 +168,7 @@ package screens
 					{
 						crashDuration++;
 						
-						if (crashDuration == 63)	// (we have 21 frames of cat crash animation) if I put 21, the animation will last only 1 second
+						if (crashDuration == 63)	// we have 21 frames of cat crash animation so we use multiples... (x3)
 						{
 							crashDuration = 0;
 							crashed = false;
@@ -407,6 +414,7 @@ package screens
 				elapsed = 0;
 			}
 		}
+		
 		private function updateRainbow():void {
 			for (var i:uint = 0; i < rainbowVector.length; i++) {
 				rainbowCheck = rainbowVector[i];
@@ -415,6 +423,7 @@ package screens
 				
 			}
 		}
+		
 	}
 	
 }

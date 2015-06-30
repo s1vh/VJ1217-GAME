@@ -13,7 +13,8 @@ package screens
 	{
 		private var scoreText:TextField;		
 		private var starBtn:Button;
-		private var score:int = 0;
+		
+		//private var scr:int = 0;
 		
 		public function GameOver() 
 		{
@@ -24,9 +25,9 @@ package screens
 		{
 			this.visible = true;
 			starBtn = new Button(Assets.getTexture("star"));
-			starBtn.x = (stage.stageWidth/2)-200;
+			starBtn.x = (stage.stageWidth / 2) - 200;
 			starBtn.y = (stage.stageHeight / 2) - 100;
-			scoreText = new TextField(100, 100, score.toString(), Assets.get48Font().name, 24, 0xffffff); //if you know how to pass score into the game over screen, assign it to this score variable
+			scoreText = new TextField(100, 100, InGame.score.toString(), Assets.get48Font().name, 48, 0xffffff); //if you know how to pass score into the game over screen, assign it to this score variable
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.y = starBtn.y + 55;
