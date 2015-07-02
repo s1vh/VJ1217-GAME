@@ -13,6 +13,7 @@ package screens
 	{
 		private var title:Image;
 		private var cat:Image;
+		private var cat2:Image;
 		private var rainbow:Image;
 		private var subtitle:Image;
 		
@@ -37,17 +38,17 @@ package screens
 			this.addChild(rainbow);
 			
 			subtitle = new Image(Assets.getWelcomeAtlas().getTexture("welcome_super"));
-			subtitle.x = 400;
+			subtitle.x = 390;
 			subtitle.y = 10;
 			this.addChild(subtitle);
 			
 			title = new Image(Assets.getWelcomeAtlas().getTexture("welcome_title"));
-			title.x = 440;
+			title.x = 430;
 			title.y = 20;
 			this.addChild(title);
 			
 			playBtn = new Button(Assets.getWelcomeAtlas().getTexture("welcome_start"));
-			playBtn.x = 440;
+			playBtn.x = 430;
 			playBtn.y = 500;
 			this.addChild(playBtn);
 			
@@ -55,6 +56,12 @@ package screens
 			cat.x = 0;
 			cat.y = 200;
 			this.addChild(cat);
+			
+			cat2 = new Image(Assets.getWelcomeAtlas().getTexture("welcome_cat"));
+			cat2.x = stage.stageWidth;
+			cat2.scaleX = -1;
+			cat2.y = 200;
+			this.addChild(cat2);
 			
 			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
 		}
@@ -76,6 +83,15 @@ package screens
 		public function initialize():void
 		{
 			this.visible = true;
+			this.addEventListener(Event.ENTER_FRAME, catAnimation);
+		}
+		
+		private function catAnimation():void
+		{
+			var currentDate:Date = new Date();
+			playBtn.y = 500 + (Math.cos(currentDate.getTime() * 0.002) * 10);
+			title.y = 20 + (Math.cos(currentDate.getTime() * 0.002) * 10);
+			subtitle.y = 10 + (Math.cos(currentDate.getTime() * 0.002) * 10);
 		}
 		
 	}
