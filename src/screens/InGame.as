@@ -2,6 +2,8 @@ package screens
 {
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	import flash.media.SoundMixer;
+	import flash.media.SoundChannel;
 	import objects.Obstacle;
 	import starling.core.Starling;
 	import starling.display.Image;
@@ -36,6 +38,7 @@ package screens
 		private var crashDuration:int = 0;
 		private var crashed:Boolean = false;
 		private var star:MovieClip;
+		private var channel:SoundChannel;
 		
 		private var spawnDelay:Number;
 		private var elapsed:Number;
@@ -145,6 +148,7 @@ package screens
 			cat.y = (stage.stageHeight / 2) + 2;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
+			if (!Sounds.muted) channel = Sounds.sndBgMain.play(0, 9999);
 			
 			// START
 			launchCat();
@@ -237,14 +241,15 @@ package screens
 					hitpoints = hitpoints - 10;
 					crashed = true;
 					cat.disposeCatArt();
-					trace(hitpoints + " HP");
+					//trace(hitpoints + " HP");
 				}
 				
 				else
 				{
 					// we should trigger a Game Over screen here, showing the score
-					trace("GAME OVER");
-					trace("final score: " + score);
+					//trace("GAME OVER");
+					//trace("final score: " + score);
+					channel.stop();
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					gameState = "gameOver";
 				}
@@ -332,7 +337,7 @@ package screens
 					case 2:
 					case 3:
 					case 4:
-						trace("GREEN incoming");
+						//trace("GREEN incoming");
 						
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
@@ -357,7 +362,7 @@ package screens
 					case 5:	
 					case 6:
 					case 7:
-						trace("STAR/s incoming");
+						//trace("STAR/s incoming");
 						
 						// this is the STAR
 						starNum = 1 + Math.floor(Math.random() * 4);	// size of the star streak (1-5)
@@ -391,7 +396,7 @@ package screens
 						// this is the RED ENEMY
 						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
-							trace("RED incoming");
+							//trace("RED incoming");
 							
 							obstacleCreated = new Obstacle(2);
 							obstacleCreated.y = 200 + Math.floor(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
@@ -408,7 +413,7 @@ package screens
 						
 						else	// if previous enemy was RED it spawns a GREEN one!
 						{
-							trace("2nd RED not allowed; GREEN incoming");
+							//trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
 							obstacleCreated.y = (obstacleCreated.height/2) + Math.floor(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
