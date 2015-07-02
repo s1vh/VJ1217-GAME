@@ -71,16 +71,7 @@ package screens
 		}
 		
 		private function drawGame():void
-		{
-			for ( var i:uint = 0; i < 50; i++)
-			{
-				rainbowCreated = new Image(Assets.getAtlas().getTexture("RbSegment"));
-				rainbowVector.push(rainbowCreated);
-				rainbowCreated.y = 402;
-				rainbowCreated.x = 0 + (rainbowCreated.width * i);
-				this.addChild(rainbowCreated);
-			}
-			
+		{			
 			cat = new Cat();
 			cat.x = stage.stageWidth / 2;
 			cat.y = stage.stageHeight / 2;
@@ -101,14 +92,37 @@ package screens
 			this.addChild(scoreText);
 		}
 		
+		private function createRainbow():void
+		{
+			rainbowCreated = new Image(Assets.getAtlas().getTexture("RbSegment"));
+			rainbowVector.push(rainbowCreated);
+			rainbowCreated.y = cat.y - cat.height / 6;
+			rainbowCreated.x = Math.floor(stage.stageWidth / 5.25);	// it deliver always the same aproximation, preventing tearing
+			rainbowCreated.scaleY = 0.01 * hitpoints;
+			this.addChild(rainbowCreated);
+		}
+		
 		private function updateRainbow():void
 		{
-			for (var i:uint = 0; i < rainbowVector.length; i++)
+			createRainbow();
+			
+			if (rainbowVector.length > 1)
 			{
-				rainbowCheck = rainbowVector[i];
-				rainbowCheck.scaleY = 0.01 * hitpoints;
-				rainbowCheck.y -= ((rainbowCheck.y - touchY) / 20) + 1;
+				for (var i:uint = rainbowVector.length - 1; i > 0; i--)
+				{
+					rainbowCheck = rainbowVector[i];
+					rainbowCheck.x -= rainbowCheck.width;
+				}
 				
+				if (rainbowCheck.x < 0)		// we know this is the last segment!
+				{
+					this.removeChild(rainbowCheck);
+				}
+			}
+			
+			else
+			{
+				rainbowVector[0].visible = false;	// not the most elegant method, but I think this is the most efficient (and we have many segments)
 			}
 		}
 		
@@ -132,8 +146,6 @@ package screens
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			
-			updateRainbow();	// it resets the rainbow height at the start
-			
 			// START
 			launchCat();
 		}
@@ -155,13 +167,10 @@ package screens
 		}
 		
 		private function onGameTick(event:Event):void
-		{
-			
+		{	
 			switch(gameState)
 			{
 				case "idle":	// TAKE OFF
-					
-					//updateRainbow();
 					
 					if (cat.x < stage.stageWidth / 5)
 					{
@@ -179,6 +188,7 @@ package screens
 				case "flying":	// game is running
 					
 					catMoving();
+					updateRainbow();
 					obstacleCreate();
 					obstacleCheck();
 					
@@ -207,11 +217,10 @@ package screens
 		private function catMoving():void
 		{
 			cat.y -= (cat.y - touchY) / 20;
-			updateRainbow();
 			
-			if ( -(cat.y - touchY) < cat.height / 2 && - (cat.y - touchY) > - cat.height / 2)
+			if (touchY - cat.y < cat.height / 2 && touchY - cat.y > - cat.height / 2)
 			{
-				cat.rotation = deg2rad(-(cat.y - touchY) / 4);
+				cat.rotation = deg2rad((touchY - cat.y) / 3);
 			}
 		}
 		
@@ -219,17 +228,16 @@ package screens
 		{
 			var obstacleToTrack:Obstacle;
 			
-			if (hit)	// we do not need invincibility cooldown for this game!
+			if (hit)
 			{
 				hit = false;
 				
 				if (hitpoints - 10 > 0)
 				{
 					hitpoints = hitpoints - 10;
-					updateRainbow();
 					crashed = true;
 					cat.disposeCatArt();
-					trace(hitpoints + "HP");
+					trace(hitpoints + " HP");
 				}
 				
 				else
@@ -249,7 +257,6 @@ package screens
 				
 				if (hitpoints < 100)
 				{
-					updateRainbow();
 					hitpoints++;
 				}
 				
@@ -259,9 +266,9 @@ package screens
 			
 			if (obstaclesToAnimate.length > 0)   
 			{
-				for (var ind:uint = 0; ind < obstaclesToAnimate.length; ind++)
+				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
 				{
-					obstacleToTrack = obstaclesToAnimate[ind]
+					obstacleToTrack = obstaclesToAnimate[i]
 					
 					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
 					{
@@ -274,8 +281,6 @@ package screens
 								if (crashed == false)
 								{
 									hit = true;
-									//crashed = true;
-									//cat.disposeCatArt();
 								}
 								
 								break;
@@ -293,14 +298,14 @@ package screens
 								break;
 						}
 						
-						obstaclesToAnimate.splice(ind, 1);
+						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
 						
 					}
 					
-					if (obstacleToTrack.x < -(obstacleToTrack.width / 2))
+					if (obstacleToTrack.x < 0)
 					{	
-						obstaclesToAnimate.splice(ind, 1);
+						obstaclesToAnimate.splice(i, 1);
 						this.removeChild(obstacleToTrack);
 					}
 					
@@ -318,12 +323,11 @@ package screens
 			if (elapsed >= spawnDelay)
 			{
 				
-				type = 1 + Math.floor(Math.random() * 9);	// ésto devuelve un random de 1 a 10
-				//trace("type OK");
+				type = 1 + Math.floor(Math.random() * 9);	// randomized object spawner
 				
 				switch(type)
 				{
-				
+					
 					case 1:
 					case 2:
 					case 3:
@@ -332,17 +336,17 @@ package screens
 						
 						// this is the GREEN ENEMY
 						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * stage.stageHeight - (obstacleCreated.height/2));	// MAGIC NUMBERS !! (where 200 is enemy.height and 700 is stage.stageHeight - enemy.height/2)
+						obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * stage.stageHeight - (obstacleCreated.height/2));
 						
 						while (prevMinY - obstacleCreated.height / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.height / 2)
 						{
 							obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * 700);
 						}
 						
-						prevMinY = obstacleCreated.y - obstacleCreated.height / 2;	// MAGIC NUMBERS !!
-						prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;	// MAGIC NUMBERS !!
+						prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
+						prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;
 						
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;	// // MAGIC NUMBERS !! (where 200 is enemy.widht)
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						
@@ -356,8 +360,8 @@ package screens
 						trace("STAR/s incoming");
 						
 						// this is the STAR
-						starNum = 1 + Math.floor(Math.random() * 4);	// ésto devuelve un random de 1 a 5
-						preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));	// MAGIC NUMBERS !! 150 = star.width & .height
+						starNum = 1 + Math.floor(Math.random() * 4);	// size of the star streak (1-5)
+						preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
 						while (prevMinY - 150 / 2 < preY && preY < prevMaxY + 150 / 2)
 						{
 							preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
@@ -396,8 +400,6 @@ package screens
 								obstacleCreated.y = 200 + Math.floor(Math.random() * 600);
 							}
 							
-							//prevMinY = obstacleCreated.y - 200;	// MAGIC NUMBERS !!
-							//prevMaxY = obstacleCreated.y + 200;	// MAGIC NUMBERS !!
 							prevMinY = obstacleCreated.y - (obstacleCreated.height/2);
 							prevMaxY = obstacleCreated.y + (obstacleCreated.height/2);
 							
@@ -409,17 +411,14 @@ package screens
 							trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
-							//obstacleCreated.y = 100 + Math.floor(Math.random() * 700);	// MAGIC NUMBERS !! (where 100 is enemy.height/2 and 700 is stage.stageHeight - enemy.height/2)
 							obstacleCreated.y = (obstacleCreated.height/2) + Math.floor(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
 							{
 								obstacleCreated.y = 100 + Math.floor(Math.random() * 700);
 							}
 							
-							//prevMinY = obstacleCreated.y - 100;	// MAGIC NUMBERS !!
-							//prevMaxY = obstacleCreated.y + 100;	// MAGIC NUMBERS !!
-							prevMinY = obstacleCreated.y - obstacleCreated.height/2;
-							prevMaxY = obstacleCreated.y + obstacleCreated.height/2;
+							prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
+							prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;
 							redAvailable = true;
 						}
 						
