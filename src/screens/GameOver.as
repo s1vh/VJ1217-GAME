@@ -14,8 +14,6 @@ package screens
 		private var scoreText:TextField;		
 		private var starBtn:Button;
 		
-		//private var scr:int = 0;
-		
 		public function GameOver() 
 		{
 			super();

@@ -100,6 +100,7 @@ package screens
 			rainbowVector.push(rainbowCheck);
 			rainbowCheck.y = cat.y - cat.height / 9.5;
 			rainbowCheck.x = Math.floor(stage.stageWidth / 5.45);		// it delivers always the same aproximation value, preventing tearing
+			//rainbowCheck.scaleX = 0.2;
 			this.addChild(rainbowCheck);
 			
 			if (rainbowVector.length > 1)
@@ -109,6 +110,7 @@ package screens
 					rainbowCheck = rainbowVector[i];							// we can override this reference now
 					rainbowCheck.alpha = 0.1 * -Math.floor(hitpoints * -0.1);	// it delivers the 0.1 multiple that is equal or higher (so we show always a little rainbow at least)
 					rainbowCheck.x -= rainbowCheck.width;						// we put the alpha update on this loop because we want to update the whole rainbow!
+					//rainbowCheck.x -= rainbowCheck.width * 5;
 				}
 				
 				if (rainbowCheck.x < 0)
@@ -165,7 +167,7 @@ package screens
 		}
 		
 		private function onGameTick(event:Event):void
-		{	
+		{
 			switch(gameState)
 			{
 				case "idle":	// TAKE OFF
@@ -209,14 +211,14 @@ package screens
 				case "gameOver":
 					
 					// reset vectors
-					for (var i:uint = 0; i < rainbowVector.length; i++)
+					for (var rb:uint = 0; rb < rainbowVector.length; rb++)
 					{
-						this.removeChild(rainbowVector[i]);
+						this.removeChild(rainbowVector[rb]);
 					}
 					
-					for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
+					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
 					{
-						this.removeChild(obstaclesToAnimate[i]);
+						this.removeChild(obstaclesToAnimate[obs]);
 					}
 					
 					break;
@@ -252,7 +254,6 @@ package screens
 				else
 				{
 					// we should trigger a Game Over screen here, showing the score
-					//trace("final score: " + score);
 					trace("GAME OVER");
 					channel.stop();
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
@@ -327,8 +328,7 @@ package screens
 		{
 			var obstacleCreated:Obstacle;
 			var type:int;
-			var starNum:int;
-			var preY:int;
+			//var starNum:int;
 			
 			if (elapsed >= spawnDelay)
 			{
@@ -346,19 +346,22 @@ package screens
 						trace("GREEN incoming");
 						
 						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = (obstacleCreated.height / 2) + Math.round(Math.random() * stage.stageHeight - (obstacleCreated.height/2));
+						obstacleCreated.setDimensions(1);
 						
-						while (prevMinY - obstacleCreated.height / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.height / 2)
+						obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
+						
+						while (prevMinY - obstacleCreated.obstacleHeight / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.obstacleHeight / 2)
 						{
-							obstacleCreated.y = (obstacleCreated.height / 2) + Math.round(Math.random() * 700);
+							obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
 						}
 						
-						prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
-						prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.obstacleWidth;
 						
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width / 2;
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
+						
+						prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
+						prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight / 2;
 						
 						redAvailable = true;
 						
@@ -370,29 +373,49 @@ package screens
 						// this is the STAR
 						trace("STAR row incoming");
 						
+						var starNum:int;
+						
 						starNum = 1 + Math.round(Math.random() * 4);	// size of the star streak (1-5)
-						preY = Math.round(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
-						while (prevMinY - 150 / 2 < preY && preY < prevMaxY + 150 / 2)
+						
+						obstacleCreated = new Obstacle(3);
+						obstacleCreated.setDimensions(3);
+						
+						obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
+						
+						while (prevMinY - obstacleCreated.obstacleHeight / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.obstacleHeight / 2)
 						{
-							preY = Math.round(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
+							obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
+							break;
 						}
 						
-						while (starNum > 0)
+						obstacleCreated.x = stage.stageWidth //+ obstacleCreated.obstacleWidth;
+						
+						var starY:int;
+						var starX:int;
+						
+						starY = obstacleCreated.y;
+						starX = obstacleCreated.x;						
+						
+						for (var stars:uint = 0; stars < starNum; stars++)
 						{
 							obstacleCreated = new Obstacle(3);
+							obstacleCreated.setDimensions(3);
 							
-							obstacleCreated.y = preY;
+							obstacleCreated.y = starY;
+							obstacleCreated.x = starX + obstacleCreated.obstacleWidth / 2;
 							
-							obstacleCreated.x = Math.round((stage.stageWidth + starNum * 150 / 2));
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 							
-							starNum--;
+							starX = obstacleCreated.x;
 						}
+						
+						prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
+						prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight / 2;
 						
 						redAvailable = true;
 						
-						break;	
+						break;
 						
 					case 8:
 					case 9:	
@@ -404,14 +427,16 @@ package screens
 							trace("RED incoming");
 							
 							obstacleCreated = new Obstacle(2);
-							obstacleCreated.y = 200 + Math.round(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
-							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
+							obstacleCreated.setDimensions(2);
+							obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
+							
+							while (prevMinY - obstacleCreated.obstacleHeight / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.obstacleHeight / 2)
 							{
-								obstacleCreated.y = 200 + Math.round(Math.random() * 600);
+								obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
 							}
 							
-							prevMinY = obstacleCreated.y - (obstacleCreated.height/2);
-							prevMaxY = obstacleCreated.y + (obstacleCreated.height/2);
+							prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
+							prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight / 2;
 							
 							redAvailable = false;
 						}
@@ -421,18 +446,22 @@ package screens
 							trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
-							obstacleCreated.y = (obstacleCreated.height/2) + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
-							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
+							obstacleCreated.setDimensions(1);
+							obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
+							
+							while (prevMinY - obstacleCreated.obstacleHeight / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.obstacleHeight / 2)
 							{
-								obstacleCreated.y = 100 + Math.round(Math.random() * 700);
+								obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
 							}
 							
-							prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
-							prevMaxY = obstacleCreated.y + obstacleCreated.height / 2;
+							prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
+							prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight / 2;
+							
 							redAvailable = true;
 						}
 						
-						obstacleCreated.x = stage.stageWidth + obstacleCreated.width/2;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.width;
+						
 						this.addChild(obstacleCreated);
 						obstaclesToAnimate.push(obstacleCreated);
 						

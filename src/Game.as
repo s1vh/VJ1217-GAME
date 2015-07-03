@@ -44,16 +44,25 @@ package
 			switch(event.params.id)
 			{
 				case "play":
+					
 					screenWelcome.disposeTemporarily();
 					screenIngame.initialize();
+					
 					break;
+					
 				case "over":
+					
 					screenIngame.disposeTemporarily();
 					screenGameOver.initialize();
-				    break;
+				    
+					break;
+					
 				case "welcome":
+					
 					screenGameOver.disposeTemporarily();
 					screenWelcome.initialize();
+					
+					break;
 			}
 		}
 	}
