@@ -2,6 +2,7 @@
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
 <!-- $TexturePacker:SmartUpdate:1dec6d9c1b115e28499bf7e27c227b3a:1cc834a78645e4358e343b624d6af9e0:1f5082dd25efd46d832fd7c3e4d09628$ -->
 <TextureAtlas imagePath="spriteSheet.png">
+    <SubTexture name="RbSegment_slim" x="0" y="2" width="1" height="75"/>
     <SubTexture name="RbSegment" x="2" y="2" width="5" height="75"/>
     <SubTexture name="backgroundStar_0000" x="9" y="2" width="38" height="38" frameX="-24" frameY="-24" frameWidth="86" frameHeight="86"/>
     <SubTexture name="backgroundStar_0001" x="49" y="2" width="86" height="86"/>
