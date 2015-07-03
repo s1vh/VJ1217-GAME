@@ -38,7 +38,7 @@ package objects
 				case 3:
 					
 					obstacleHeight = 150;
-					obstacleWidth = 200;
+					obstacleWidth = 150;
 					break;
 			}
 		}
