@@ -99,9 +99,10 @@ package screens
 			rainbowCheck = new Image(Assets.getAtlas().getTexture("RbSegment"));
 			rainbowVector.push(rainbowCheck);
 			rainbowCheck.y = cat.y - cat.height / 9.5;
-			rainbowCheck.x = Math.floor(stage.stageWidth / 5.45);		// it delivers always the same aproximation value, preventing tearing
+			rainbowCheck.x = Math.floor(cat.x - cat.x / 9.5);			// it delivers always the same aproximation value, preventing tearing
 			//rainbowCheck.scaleX = 0.2;
 			this.addChild(rainbowCheck);
+			this.setChildIndex(rainbowCheck, 0);
 			
 			if (rainbowVector.length > 1)
 			{
@@ -375,7 +376,7 @@ package screens
 						
 						var starNum:int;
 						
-						starNum = 1 + Math.round(Math.random() * 4);	// size of the star streak (1-5)
+						starNum = 1 + Math.round(Math.random() * 4);	// size of the star row (1-5)
 						
 						obstacleCreated = new Obstacle(3);
 						obstacleCreated.setDimensions(3);
