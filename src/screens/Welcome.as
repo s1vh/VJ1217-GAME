@@ -74,9 +74,9 @@ package screens
 			var buttonClicked:Button = event.target as Button;
 			if ((buttonClicked as Button) == playBtn)
 			{
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "play" }, true));
 				fxChannel = Sounds.sndFxStart.play();
 				musicChannel.stop();
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "play" }, true));
 			}
 		}
 		

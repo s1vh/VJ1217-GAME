@@ -142,7 +142,7 @@ package screens
 			this.visible = true;
 			
 			// RESET VARIABLES
-			hitpoints = 100;
+			hitpoints = 10;
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
@@ -221,18 +221,7 @@ package screens
 					
 				case "gameOver":
 					
-					// reset vectors
-					for (var rb:uint = 0; rb < rainbowVector.length; rb++)
-					{
-						rainbowVector.splice(rb, 1);
-						this.removeChild(rainbowVector[rb]);
-					}
-					
-					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
-					{
-						rainbowVector.splice(obs, 1);
-						this.removeChild(obstaclesToAnimate[obs]);
-					}
+					// we show a Game Over screen here, along with the last score
 					
 					break;
 			}
@@ -267,12 +256,25 @@ package screens
 				
 				else
 				{
-					// we should trigger a Game Over screen here, showing the score
-					fxChannel = Sounds.sndFxDeath.play();
-					trace("GAME OVER");
 					musicChannel.stop();
-					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
+					fxChannel = Sounds.sndFxDeath.play();
+					
+					// reset vectors
+					//for (var rb:uint = 0; rb < rainbowVector.length; rb++)
+					//{
+						//rainbowVector.splice(rb, 1);
+						//this.removeChild(rainbowVector[rb]);
+					//}
+					
+					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
+					{
+						rainbowVector.splice(obs, 1);
+						this.removeChild(obstaclesToAnimate[obs]);
+					}
+					
 					gameState = "gameOver";
+					trace("GAME OVER");
+					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 				}
 				
 			}
