@@ -30,7 +30,6 @@ package screens
 		private var enemigoCreado:int = 0;
 		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
 		private var rainbowVector:Vector.<Image> = new Vector.<Image>();
-		private var rainbowCreated:Image;
 		private var rainbowCheck:Image;
 		private var prevMinY:int = 800;
 		private var prevMaxY:int = 0;
@@ -95,26 +94,21 @@ package screens
 			this.addChild(scoreText);
 		}
 		
-		private function createRainbow():void
+		private function createUpdateRainbow():void
 		{
-			rainbowCreated = new Image(Assets.getAtlas().getTexture("RbSegment"));
-			rainbowVector.push(rainbowCreated);
-			rainbowCreated.y = cat.y - cat.height / 6;
-			rainbowCreated.x = Math.floor(stage.stageWidth / 5.25);	// it deliver always the same aproximation, preventing tearing
-			rainbowCreated.scaleY = 0.01 * hitpoints;
-			this.addChild(rainbowCreated);
-		}
-		
-		private function updateRainbow():void
-		{
-			createRainbow();
+			rainbowCheck = new Image(Assets.getAtlas().getTexture("RbSegment"));
+			rainbowVector.push(rainbowCheck);
+			rainbowCheck.y = cat.y - cat.height / 6;
+			rainbowCheck.x = Math.floor(stage.stageWidth / 5.25);				// it delivers always the same aproximation value, preventing tearing
+			this.addChild(rainbowCheck);
 			
 			if (rainbowVector.length > 1)
 			{
 				for (var i:uint = rainbowVector.length - 1; i > 0; i--)
 				{
-					rainbowCheck = rainbowVector[i];
-					rainbowCheck.x -= rainbowCheck.width;
+					rainbowCheck = rainbowVector[i];							// we can override this reference now
+					rainbowCheck.alpha = 0.1 * -Math.floor(hitpoints * -0.1);	// it delivers the 0.1 multiple that is equal or higher (so we show always a little rainbow at least)
+					rainbowCheck.x -= rainbowCheck.width;						// we put the alpha update on this loop because we want to update the whole rainbow!
 				}
 				
 				if (rainbowCheck.x < 0)		// we know this is the last segment!
@@ -125,7 +119,7 @@ package screens
 			
 			else
 			{
-				rainbowVector[0].visible = false;	// not the most elegant method, but I think this is the most efficient (and we have many segments)
+				rainbowVector[0].visible = false;	// not the most elegant method, but I think this is the most efficient (and we have many segments and we can't reverse the array twice per frame)
 			}
 		}
 		
@@ -192,7 +186,7 @@ package screens
 				case "flying":	// game is running
 					
 					catMoving();
-					updateRainbow();
+					createUpdateRainbow();
 					obstacleCreate();
 					obstacleCheck();
 					
@@ -241,14 +235,14 @@ package screens
 					hitpoints = hitpoints - 10;
 					crashed = true;
 					cat.disposeCatArt();
-					//trace(hitpoints + " HP");
+					trace(hitpoints + " HP");
 				}
 				
 				else
 				{
 					// we should trigger a Game Over screen here, showing the score
-					//trace("GAME OVER");
 					//trace("final score: " + score);
+					trace("GAME OVER");
 					channel.stop();
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					gameState = "gameOver";
@@ -328,7 +322,7 @@ package screens
 			if (elapsed >= spawnDelay)
 			{
 				
-				type = 1 + Math.floor(Math.random() * 9);	// randomized object spawner
+				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
 				
 				switch(type)
 				{
@@ -337,15 +331,15 @@ package screens
 					case 2:
 					case 3:
 					case 4:
-						//trace("GREEN incoming");
-						
 						// this is the GREEN ENEMY
+						trace("GREEN incoming");
+						
 						obstacleCreated = new Obstacle(1);
-						obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * stage.stageHeight - (obstacleCreated.height/2));
+						obstacleCreated.y = (obstacleCreated.height / 2) + Math.round(Math.random() * stage.stageHeight - (obstacleCreated.height/2));
 						
 						while (prevMinY - obstacleCreated.height / 2 < obstacleCreated.y && obstacleCreated.y < prevMaxY + obstacleCreated.height / 2)
 						{
-							obstacleCreated.y = (obstacleCreated.height / 2) + Math.floor(Math.random() * 700);
+							obstacleCreated.y = (obstacleCreated.height / 2) + Math.round(Math.random() * 700);
 						}
 						
 						prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
@@ -362,14 +356,14 @@ package screens
 					case 5:	
 					case 6:
 					case 7:
-						//trace("STAR/s incoming");
-						
 						// this is the STAR
-						starNum = 1 + Math.floor(Math.random() * 4);	// size of the star streak (1-5)
-						preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
+						trace("STAR row incoming");
+						
+						starNum = 1 + Math.round(Math.random() * 4);	// size of the star streak (1-5)
+						preY = Math.round(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
 						while (prevMinY - 150 / 2 < preY && preY < prevMaxY + 150 / 2)
 						{
-							preY = Math.floor(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
+							preY = Math.round(150 / 2 + Math.random() * (stage.stageHeight - 150 / 2));
 						}
 						
 						while (starNum > 0)
@@ -378,7 +372,7 @@ package screens
 							
 							obstacleCreated.y = preY;
 							
-							obstacleCreated.x = Math.floor((stage.stageWidth + starNum * 150 / 2));
+							obstacleCreated.x = Math.round((stage.stageWidth + starNum * 150 / 2));
 							this.addChild(obstacleCreated);
 							obstaclesToAnimate.push(obstacleCreated);
 							
@@ -392,17 +386,17 @@ package screens
 					case 8:
 					case 9:	
 					case 10:
-						
 						// this is the RED ENEMY
+						
 						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
-							//trace("RED incoming");
+							trace("RED incoming");
 							
 							obstacleCreated = new Obstacle(2);
-							obstacleCreated.y = 200 + Math.floor(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
+							obstacleCreated.y = 200 + Math.round(Math.random() * 600);	// MAGIC NUMBERS !! (where 200 is enemy.height/2 * cos(x) * A and 600 is stage.stageHeight - enemy.height/2 * cos(x) * A)
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
 							{
-								obstacleCreated.y = 200 + Math.floor(Math.random() * 600);
+								obstacleCreated.y = 200 + Math.round(Math.random() * 600);
 							}
 							
 							prevMinY = obstacleCreated.y - (obstacleCreated.height/2);
@@ -413,13 +407,13 @@ package screens
 						
 						else	// if previous enemy was RED it spawns a GREEN one!
 						{
-							//trace("2nd RED not allowed; GREEN incoming");
+							trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
-							obstacleCreated.y = (obstacleCreated.height/2) + Math.floor(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
+							obstacleCreated.y = (obstacleCreated.height/2) + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.height/2));
 							while (prevMinY < obstacleCreated.y && obstacleCreated.y < prevMaxY)
 							{
-								obstacleCreated.y = 100 + Math.floor(Math.random() * 700);
+								obstacleCreated.y = 100 + Math.round(Math.random() * 700);
 							}
 							
 							prevMinY = obstacleCreated.y - obstacleCreated.height / 2;
