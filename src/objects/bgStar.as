@@ -1,5 +1,6 @@
 package objects 
 {
+	import screens.InGame;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -42,7 +43,7 @@ package objects
 		
 		private function onGameTick():void
 		{
-			this.x -= this.width * 0.1;		// we don't need layers if we can move them gradually depending of its size!
+			this.x -= Math.round(this.width * InGame.velocity * 0.01);	// we don't need layers if we can move them gradually depending of its size!
 		}
 		
 	}

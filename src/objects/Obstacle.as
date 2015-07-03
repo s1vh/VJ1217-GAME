@@ -1,5 +1,6 @@
 package objects
 {
+	import screens.InGame;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -76,16 +77,16 @@ package objects
 		}
 		
 		private function onGameTick():void
-		{
+		{			
 			if (this.obstacleType == 2)
 			{
-				this.x -= 10;
+				this.x -= Math.round(InGame.velocity);
 				this.y += Math.cos(this.x * 0.005) * 10;
 			}
 			
 			else
 			{
-				this.x -= 10;
+				this.x -= Math.round(InGame.velocity);
 			}
 			
 		}

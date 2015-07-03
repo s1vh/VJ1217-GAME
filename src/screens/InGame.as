@@ -62,7 +62,9 @@ package screens
 		
 		private var scoreText:TextField;
 		private var hitpoints:int;
+		
 		public static var score:int;
+		public static var velocity:Number = 10;
 		
 		public dynamic function getScore():int
 		{
@@ -154,6 +156,7 @@ package screens
 			cat.rotation = 0;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
+			velocity = 10;
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			particleVector  = new Vector.<Particle>();
 			
@@ -209,6 +212,11 @@ package screens
 					animateStarParticles();
 					bgCreate();
 					
+					if (velocity < 24)				// we upgrade the velocity progresively until 24 to get the feeling of acceleration
+					{
+						velocity += Math.log(1.01) * 0.25;
+					}
+					
 					if (crashed)
 					{
 						crashDuration++;
@@ -247,6 +255,7 @@ package screens
 			
 			if (hit)
 			{
+				velocity = 10;		// we reset velocity on hit!
 				hit = false;
 				
 				if (hitpoints - 20 > 0)
@@ -413,9 +422,9 @@ package screens
 			var obstacleCreated:Obstacle;
 			var type:int;
 			
-			elapsed++;
+			elapsed += Math.round(velocity * 0.1);	// elapsed time depends of current velocity to prevent big blank areas and balance difficulty
 			
-			if (elapsed >= spawnDelay)
+			if (elapsed >= spawnDelay)				// we use greater or equal because depending on the current velocity we can easily bypass it
 			{
 				started = true;				
 				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
