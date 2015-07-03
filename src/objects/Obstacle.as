@@ -11,11 +11,9 @@ package objects
 	{
 		private var obstacleArt:MovieClip;
 		private var obstacleType:int;
-		private var difficulty:int;
-		private var currentDate:Date = new Date();
 		
-		public var obstacleHeight:int //= 200;
-		public var obstacleWidth:int //= 200;
+		public var obstacleHeight:int;
+		public var obstacleWidth:int;
 		
 		public function Obstacle(type:int)
 		{

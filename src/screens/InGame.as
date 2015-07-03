@@ -136,13 +136,14 @@ package screens
 			this.visible = true;
 			
 			// RESET VARIABLES
-			hitpoints = 100;
+			hitpoints = 10;
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
 			elapsed = 0;
 			cat.x = -stage.stageWidth;
 			cat.y = (stage.stageHeight / 2) + 2;
+			cat.rotation = 0;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			if (!Sounds.muted) channel = Sounds.sndBgMain.play(0, 9999);
