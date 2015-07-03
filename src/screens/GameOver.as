@@ -8,11 +8,13 @@ package screens
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
+	import flash.media.SoundChannel;
 	
 	public class GameOver extends starling.display.Sprite
 	{
 		private var scoreText:TextField;		
 		private var starBtn:Button;
+		private var channel:SoundChannel;
 		
 		public function GameOver() 
 		{
@@ -54,6 +56,7 @@ package screens
 			var buttonClicked:Button = event.target as Button;
 			if ((buttonClicked as Button) == starBtn)
 			{
+				channel = Sounds.sndFxMeow.play();
 				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "welcome" }, true));
 			}
 		}

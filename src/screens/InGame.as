@@ -37,7 +37,8 @@ package screens
 		private var crashDuration:int = 0;
 		private var crashed:Boolean = false;
 		private var star:MovieClip;
-		private var channel:SoundChannel;
+		private var musicChannel:SoundChannel;
+		private var fxChannel:SoundChannel;
 		
 		private var spawnDelay:Number;
 		private var elapsed:Number;
@@ -146,7 +147,7 @@ package screens
 			cat.rotation = 0;
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
-			if (!Sounds.muted) channel = Sounds.sndBgMain.play(0, 9999);
+			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			
 			// START
 			launchCat();
@@ -183,6 +184,7 @@ package screens
 					else
 					{
 						gameState = "flying";
+						fxChannel = Sounds.sndFxTakeOff.play();
 					}
 					
 					break;
@@ -247,6 +249,7 @@ package screens
 				
 				if (hitpoints - 10 > 0)
 				{
+					
 					hitpoints = hitpoints - 10;
 					crashed = true;
 					cat.disposeCatArt();
@@ -256,8 +259,9 @@ package screens
 				else
 				{
 					// we should trigger a Game Over screen here, showing the score
+					fxChannel = Sounds.sndFxDeath.play();
 					trace("GAME OVER");
-					channel.stop();
+					musicChannel.stop();
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					gameState = "gameOver";
 				}
@@ -267,6 +271,7 @@ package screens
 			if (collect)
 			{
 				collect = false;
+				
 				
 				if (hitpoints < 100)
 				{
@@ -294,6 +299,7 @@ package screens
 								if (crashed == false)
 								{
 									hit = true;
+									fxChannel = Sounds.sndFxDamage.play();
 								}
 								
 								break;
@@ -302,6 +308,7 @@ package screens
 							case 3:
 								
 								collect = true;
+								fxChannel = Sounds.sndFxCollect.play();
 								
 								if (spawnDelay > 50)
 								{
