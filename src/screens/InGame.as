@@ -422,7 +422,7 @@ package screens
 			var obstacleCreated:Obstacle;
 			var type:int;
 			
-			elapsed += Math.round(velocity * 0.1);	// elapsed time depends of current velocity to prevent big blank areas and balance difficulty
+			elapsed += Math.floor(velocity * 0.1);	// elapsed time depends of current velocity to prevent big blank areas and balance difficulty
 			
 			if (elapsed >= spawnDelay)				// we use greater or equal because depending on the current velocity we can easily bypass it
 			{
@@ -549,8 +549,8 @@ package screens
 								obstacleCreated.y = obstacleCreated.obstacleHeight / 2 + Math.round(Math.random() * (stage.stageHeight - obstacleCreated.obstacleHeight));
 							}
 							
-							prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
-							prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight / 2;
+							prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight;		// we need to compare and leave a larger blocked area because the movement pattern
+							prevMaxY = obstacleCreated.y + obstacleCreated.obstacleHeight;		// so we are blocking twice the area than for other objects !
 							
 							redAvailable = true;
 						}
