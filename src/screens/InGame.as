@@ -208,12 +208,16 @@ package screens
 					
 				case "gameOver":
 					
+					// reset vectors
 					for (var i:uint = 0; i < rainbowVector.length; i++)
 					{
 						this.removeChild(rainbowVector[i]);
 					}
 					
-					//for (var i:uint = 0; i < rainbowVector.length; i++)
+					for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
+					{
+						this.removeChild(obstaclesToAnimate[i]);
+					}
 					
 					break;
 			}
