@@ -40,15 +40,15 @@ package screens
 			rainbow.y = 0;
 			this.addChild(rainbow);
 			
-			subtitle = new Image(Assets.getWelcomeAtlas().getTexture("welcome_super"));
-			subtitle.x = 390;
-			subtitle.y = 10;
-			this.addChild(subtitle);
-			
 			title = new Image(Assets.getWelcomeAtlas().getTexture("welcome_title"));
 			title.x = 430;
 			title.y = 20;
 			this.addChild(title);
+			
+			subtitle = new Image(Assets.getWelcomeAtlas().getTexture("welcome_super"));
+			subtitle.x = 390;
+			subtitle.y = 10;
+			this.addChild(subtitle);
 			
 			playBtn = new Button(Assets.getWelcomeAtlas().getTexture("welcome_start"));
 			playBtn.x = 430;
@@ -95,9 +95,14 @@ package screens
 		private function catAnimation():void
 		{
 			var currentDate:Date = new Date();
-			playBtn.y = 500 + (Math.cos(currentDate.getTime() * 0.002) * 10);
-			title.y = 20 + (Math.cos(currentDate.getTime() * 0.002) * 10);
-			subtitle.y = 10 + (Math.cos(currentDate.getTime() * 0.002) * 10);
+			playBtn.y = 500 + (Math.sin(currentDate.getTime() * 0.01) * 10);
+			//subtitle.y = 10 + (Math.cos(currentDate.getTime() * 0.01) * 10);
+			subtitle.scaleX = 1 + (Math.sin(currentDate.getTime() * 0.01) * 0.05);
+			subtitle.scaleY = 1 + (Math.sin(currentDate.getTime() * 0.01) * 0.05);
+			title.y = 20 + (Math.cos(currentDate.getTime() * 0.002) * 20);
+			cat.x = Math.cos(currentDate.getTime() * 0.005) * 10 - 10;
+			cat2.x = stage.stageWidth - Math.cos(currentDate.getTime() * 0.005) * 10 + 10;
+			rainbow.scaleY = 1.10 + Math.cos(currentDate.getTime() * 0.002) * 0.05;
 		}
 		
 	}
