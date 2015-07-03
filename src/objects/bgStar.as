@@ -42,7 +42,7 @@ package objects
 		
 		private function onGameTick():void
 		{
-			this.x -= this.width * 0.1;
+			this.x -= this.width * 0.1;		// we don't need layers if we can move them gradually depending of its size!
 		}
 		
 	}

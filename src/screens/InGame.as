@@ -54,6 +54,7 @@ package screens
 		
 		private var hit:Boolean = false;
 		private var collect:Boolean = false;
+		private var started:Boolean = false;	// this boolean controls a convenient untouchable time when the game has started
 		
 		private var touch:Touch;
 		private var touchX:Number;
@@ -156,6 +157,9 @@ package screens
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			particleVector  = new Vector.<Particle>();
 			
+			trace(rainbowVector.length);
+			trace(obstaclesToAnimate.length);
+			
 			// START
 			launchCat();
 		}
@@ -245,10 +249,10 @@ package screens
 			{
 				hit = false;
 				
-				if (hitpoints - 10 > 0)
+				if (hitpoints - 20 > 0)
 				{
 					
-					hitpoints = hitpoints - 10;
+					hitpoints = hitpoints - 20;
 					crashed = true;
 					cat.disposeCatArt();
 					trace(hitpoints + " HP");
@@ -268,8 +272,9 @@ package screens
 					
 					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
 					{
-						rainbowVector.splice(obs, 0);
-						this.removeChild(obstaclesToAnimate[obs]);
+						obstacleToTrack = obstaclesToAnimate[obs];
+						obstaclesToAnimate.splice(obs, 1);
+						this.removeChild(obstacleToTrack);
 					}
 					
 					gameState = "gameOver";
@@ -283,7 +288,6 @@ package screens
 			{
 				collect = false;
 				
-				
 				if (hitpoints < 100)
 				{
 					hitpoints++;
@@ -291,6 +295,7 @@ package screens
 				
 				score++;
 				scoreText.text = score.toString();
+				trace(hitpoints + " HP");
 			}
 			
 			if (obstaclesToAnimate.length > 0)   
@@ -299,7 +304,7 @@ package screens
 				{
 					obstacleToTrack = obstaclesToAnimate[i]
 					
-					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false)
+					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false && started)
 					{
 						switch(obstacleToTrack.type)
 						{
@@ -325,9 +330,19 @@ package screens
 								obstaclesToAnimate.splice(i, 1);
 								this.removeChild(obstacleToTrack);
 								
-								if (spawnDelay > 50)
+								if (spawnDelay > 60)
 								{
 									spawnDelay--;									
+								}
+								
+								else if (spawnDelay > 40)
+								{
+									spawnDelay -= 0.5;
+								}
+								
+								else if (spawnDelay > 20)
+								{
+									spawnDelay -= 0.25;
 								}
 								
 								break;
@@ -402,7 +417,7 @@ package screens
 			
 			if (elapsed >= spawnDelay)
 			{
-				
+				started = true;				
 				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
 				
 				switch(type)
@@ -413,7 +428,7 @@ package screens
 					case 3:
 					case 4:
 						// this is the GREEN ENEMY
-						trace("GREEN incoming");
+						//trace("GREEN incoming");
 						
 						obstacleCreated = new Obstacle(1);
 						obstacleCreated.setDimensions(1);
@@ -441,7 +456,7 @@ package screens
 					case 6:
 					case 7:
 						// this is the STAR
-						trace("STAR row incoming");
+						//trace("STAR row incoming");
 						
 						var starNum:int;
 						
@@ -495,7 +510,7 @@ package screens
 						
 						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
-							trace("RED incoming");
+							//trace("RED incoming");
 							
 							obstacleCreated = new Obstacle(2);
 							obstacleCreated.setDimensions(2);
@@ -514,7 +529,7 @@ package screens
 						
 						else	// if previous enemy was RED it spawns a GREEN one!
 						{
-							trace("2nd RED not allowed; GREEN incoming");
+							//trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
 							obstacleCreated.setDimensions(1);

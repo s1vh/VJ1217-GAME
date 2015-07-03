@@ -12,6 +12,7 @@ package screens
 	
 	public class GameOver extends starling.display.Sprite
 	{
+		private var tokenArt:MovieClip;
 		private var scoreText:TextField;		
 		private var starBtn:Button;
 		private var channel:SoundChannel;
@@ -19,7 +20,20 @@ package screens
 		public function GameOver() 
 		{
 			super();
+			//this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
 		}
+		
+		//private function onAddedToStage(event:Event):void
+		//{
+			//this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			//animate();
+		//}
+		
+		//private function animate():void
+		//{	
+			//tokenArt = new MovieClip(Assets.getAtlas().getTextures("star00"), 20);
+			//this.addChild(tokenArt);
+		//}
 		
 		public function initialize():void
 		{

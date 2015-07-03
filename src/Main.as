@@ -14,7 +14,7 @@ package
 		private var stats:Stats;
 		private var myStarling:Starling;
 		
-		public var showStats:Boolean = true;	// set it as FALSE to hide stats
+		public var showStats:Boolean = false;	// set it as TRUE to show stats
 		
 		public function Main()
 		{
