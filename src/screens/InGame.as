@@ -98,8 +98,8 @@ package screens
 		{
 			rainbowCheck = new Image(Assets.getAtlas().getTexture("RbSegment"));
 			rainbowVector.push(rainbowCheck);
-			rainbowCheck.y = cat.y - cat.height / 6;
-			rainbowCheck.x = Math.floor(stage.stageWidth / 5.25);				// it delivers always the same aproximation value, preventing tearing
+			rainbowCheck.y = cat.y - cat.height / 9.5;
+			rainbowCheck.x = Math.floor(stage.stageWidth / 5.45);		// it delivers always the same aproximation value, preventing tearing
 			this.addChild(rainbowCheck);
 			
 			if (rainbowVector.length > 1)
@@ -111,9 +111,9 @@ package screens
 					rainbowCheck.x -= rainbowCheck.width;						// we put the alpha update on this loop because we want to update the whole rainbow!
 				}
 				
-				if (rainbowCheck.x < 0)		// we know this is the last segment!
+				if (rainbowCheck.x < 0)
 				{
-					this.removeChild(rainbowCheck);
+					this.removeChild(rainbowCheck);						// we know this is the last segment!
 				}
 			}
 			
@@ -207,6 +207,13 @@ package screens
 					break;
 					
 				case "gameOver":
+					
+					for (var i:uint = 0; i < rainbowVector.length; i++)
+					{
+						this.removeChild(rainbowVector[i]);
+					}
+					
+					//for (var i:uint = 0; i < rainbowVector.length; i++)
 					
 					break;
 			}
