@@ -25,7 +25,7 @@ package objects
 		
 		private function onGameTick():void
 		{
-			// insert some code here
+			this.x -= this.width * 0.5;
 		}
 		
 	}

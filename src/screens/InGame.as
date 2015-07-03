@@ -41,7 +41,9 @@ package screens
 		private var fxChannel:SoundChannel;
 		
 		private var spawnDelay:Number;
-		private var elapsed:Number;
+		private var itemElapsed:Number;
+		
+		
 		
 		private var gameState:String;
 		
@@ -141,7 +143,7 @@ package screens
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
-			elapsed = 0;
+			itemElapsed = 0;
 			cat.x = -stage.stageWidth;
 			cat.y = (stage.stageHeight / 2) + 2;
 			cat.rotation = 0;
@@ -208,7 +210,7 @@ package screens
 						}
 					}
 					
-					elapsed++;
+					//elapsed++;
 					
 					break;
 					
@@ -300,6 +302,8 @@ package screens
 								{
 									hit = true;
 									fxChannel = Sounds.sndFxDamage.play();
+									obstaclesToAnimate.splice(i, 1);
+									this.removeChild(obstacleToTrack);
 								}
 								
 								break;
@@ -309,6 +313,8 @@ package screens
 								
 								collect = true;
 								fxChannel = Sounds.sndFxCollect.play();
+								obstaclesToAnimate.splice(i, 1);
+								this.removeChild(obstacleToTrack);
 								
 								if (spawnDelay > 50)
 								{
@@ -318,8 +324,8 @@ package screens
 								break;
 						}
 						
-						obstaclesToAnimate.splice(i, 1);
-						this.removeChild(obstacleToTrack);
+						//obstaclesToAnimate.splice(i, 1);
+						//this.removeChild(obstacleToTrack);
 						
 					}
 					
@@ -337,9 +343,10 @@ package screens
 		{
 			var obstacleCreated:Obstacle;
 			var type:int;
-			//var starNum:int;
 			
-			if (elapsed >= spawnDelay)
+			itemElapsed++;
+			
+			if (itemElapsed >= spawnDelay)
 			{
 				
 				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
@@ -478,7 +485,7 @@ package screens
 						break;
 				}
 					
-				elapsed = 0;
+				itemElapsed = 0;
 			}
 		}
 		
