@@ -8,6 +8,7 @@ package screens
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import flash.media.SoundChannel;
 	
 	public class Welcome extends starling.display.Sprite
 	{
@@ -16,6 +17,7 @@ package screens
 		private var cat2:Image;
 		private var rainbow:Image;
 		private var subtitle:Image;
+		private var channel:SoundChannel;
 		
 		private var playBtn:Button;
 		
@@ -72,6 +74,7 @@ package screens
 			if ((buttonClicked as Button) == playBtn)
 			{
 				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "play" }, true));
+				channel.stop();
 			}
 		}
 		
@@ -84,6 +87,7 @@ package screens
 		{
 			this.visible = true;
 			this.addEventListener(Event.ENTER_FRAME, catAnimation);
+			channel = Sounds.sndBgWelcome.play(2000,999);
 		}
 		
 		private function catAnimation():void
