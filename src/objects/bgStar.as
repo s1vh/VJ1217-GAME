@@ -23,6 +23,11 @@ package objects
 			starArt = new MovieClip(Assets.getAtlas().getTextures("backgroundStar"), 3);
 		}
 		
+		private function onGameTick():void
+		{
+			// insert some code here
+		}
+		
 	}
 
 }
