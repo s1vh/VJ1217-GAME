@@ -46,7 +46,6 @@ package objects
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
 			createObstacleArt(this.obstacleType);
-			
 		}
 		
 		private function createObstacleArt(spriteType:int):void
@@ -84,7 +83,10 @@ package objects
 				this.y += Math.cos(this.x * 0.005) * 10;
 			}
 			
-			else this.x -= 10;
+			else
+			{
+				this.x -= 10;
+			}
 			
 		}
 		

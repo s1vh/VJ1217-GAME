@@ -136,7 +136,7 @@ package screens
 			this.visible = true;
 			
 			// RESET VARIABLES
-			hitpoints = 10;
+			hitpoints = 100;
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
