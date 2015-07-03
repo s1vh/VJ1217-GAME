@@ -396,7 +396,7 @@ package screens
 						starY = obstacleCreated.y;
 						starX = obstacleCreated.x;						
 						
-						for (var stars:uint = 0; stars < starNum; stars++)
+						while (starNum > 0)
 						{
 							obstacleCreated = new Obstacle(3);
 							obstacleCreated.setDimensions(3);
@@ -408,6 +408,7 @@ package screens
 							obstaclesToAnimate.push(obstacleCreated);
 							
 							starX = obstacleCreated.x;
+							starNum--;
 						}
 						
 						prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;
