@@ -102,7 +102,7 @@ package screens
 			rainbowCheck = new Image(Assets.getAtlas().getTexture("RbSegment"));
 			rainbowVector.push(rainbowCheck);
 			rainbowCheck.y = cat.y - cat.height / 9.5;
-			rainbowCheck.x = Math.floor(cat.x - cat.x / 9.5);			// it delivers always the same aproximation value, preventing tearing
+			rainbowCheck.x = Math.floor(cat.x - cat.x / 9.5);			// it delivers always the same aproximation value, preventing tearing on the rainbow
 			//rainbowCheck.scaleX = 0.2;
 			this.addChild(rainbowCheck);
 			this.setChildIndex(rainbowCheck, 0);
@@ -119,6 +119,7 @@ package screens
 				
 				if (rainbowCheck.x < 0)
 				{
+					rainbowVector.splice(i, 1);
 					this.removeChild(rainbowCheck);						// we know this is the last segment!
 				}
 			}
@@ -219,11 +220,13 @@ package screens
 					// reset vectors
 					for (var rb:uint = 0; rb < rainbowVector.length; rb++)
 					{
+						rainbowVector.splice(rb, 1);
 						this.removeChild(rainbowVector[rb]);
 					}
 					
 					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
 					{
+						rainbowVector.splice(obs, 1);
 						this.removeChild(obstaclesToAnimate[obs]);
 					}
 					
