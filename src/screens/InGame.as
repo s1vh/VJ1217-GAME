@@ -45,8 +45,6 @@ package screens
 		private var spawnDelay:Number;
 		private var itemElapsed:Number;
 		
-		
-		
 		private var gameState:String;
 		
 		private var hit:Boolean = false;
@@ -105,7 +103,6 @@ package screens
 			rainbowVector.push(rainbowCheck);
 			rainbowCheck.y = cat.y - cat.height / 9.5;
 			rainbowCheck.x = Math.floor(cat.x - cat.x / 9.5);			// it delivers always the same aproximation value, preventing tearing on the rainbow
-			//rainbowCheck.scaleX = 0.2;
 			this.addChild(rainbowCheck);
 			this.setChildIndex(rainbowCheck, 0);
 			
@@ -116,7 +113,6 @@ package screens
 					rainbowCheck = rainbowVector[i];							// we can override this reference now
 					rainbowCheck.alpha = 0.1 * -Math.floor(hitpoints * -0.1);	// it delivers the 0.1 multiple that is equal or higher (so we show always a little rainbow at least)
 					rainbowCheck.x -= rainbowCheck.width;						// we put the alpha update on this loop because we want to update the whole rainbow!
-					//rainbowCheck.x -= rainbowCheck.width * 5;
 				}
 				
 				if (rainbowCheck.x < 0)
@@ -142,7 +138,7 @@ package screens
 			this.visible = true;
 			
 			// RESET VARIABLES
-			hitpoints = 10;
+			hitpoints = 100;
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
@@ -260,15 +256,15 @@ package screens
 					fxChannel = Sounds.sndFxDeath.play();
 					
 					// reset vectors
-					//for (var rb:uint = 0; rb < rainbowVector.length; rb++)
-					//{
-						//rainbowVector.splice(rb, 1);
-						//this.removeChild(rainbowVector[rb]);
-					//}
+					for (var rb:uint = 0; rb < rainbowVector.length; rb++)
+					{
+						rainbowVector.splice(rb, 0);
+						this.removeChild(rainbowVector[rb]);
+					}
 					
 					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
 					{
-						rainbowVector.splice(obs, 1);
+						rainbowVector.splice(obs, 0);
 						this.removeChild(obstaclesToAnimate[obs]);
 					}
 					
@@ -332,10 +328,6 @@ package screens
 								
 								break;
 						}
-						
-						//obstaclesToAnimate.splice(i, 1);
-						//this.removeChild(obstacleToTrack);
-						
 					}
 					
 					if (obstacleToTrack.x < 0)
@@ -348,7 +340,7 @@ package screens
 			}
 		}
 		
-		private function createStarParticle(obstacleToTrack:Obstacle)
+		private function createStarParticle(obstacleToTrack:Obstacle):void
 		{
 			var count:int = 5;
 			while (count > 0) {
@@ -369,7 +361,7 @@ package screens
 			}
 		}
 		
-		private function animateStarParticles()
+		private function animateStarParticles():void
 		{
 			for (var i:uint = 0; i < particleVector.length; i++)
 			{

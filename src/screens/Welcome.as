@@ -96,7 +96,6 @@ package screens
 		{
 			var currentDate:Date = new Date();
 			playBtn.y = 500 + (Math.sin(currentDate.getTime() * 0.01) * 10);
-			//subtitle.y = 10 + (Math.cos(currentDate.getTime() * 0.01) * 10);
 			subtitle.scaleX = 1 + (Math.sin(currentDate.getTime() * 0.01) * 0.05);
 			subtitle.scaleY = 1 + (Math.sin(currentDate.getTime() * 0.01) * 0.05);
 			title.y = 20 + (Math.cos(currentDate.getTime() * 0.002) * 20);
