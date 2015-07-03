@@ -20,6 +20,9 @@ package
 		[Embed(source = "../media/graphics/star0000.png")]
 		public static const star:Class;
 		
+		[Embed(source = "../media/graphics/particle.png")]
+		public static const particle:Class;
+		
 		[Embed(source = "../media/graphics/welcomeScreen_sheet.xml", mimeType="application/octet-stream")]
 		public static const AtlasXmlWelcome:Class;
 		

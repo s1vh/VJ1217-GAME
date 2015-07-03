@@ -5,6 +5,7 @@ package screens
 	import flash.media.SoundMixer;
 	import flash.media.SoundChannel;
 	import objects.Obstacle;
+	import objects.Particle;
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.MovieClip;
@@ -30,6 +31,7 @@ package screens
 		private var enemigoCreado:int = 0;
 		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
 		private var rainbowVector:Vector.<Image> = new Vector.<Image>();
+		private var particleVector:Vector.<Particle>;
 		private var rainbowCheck:Image;
 		private var prevMinY:int = 800;
 		private var prevMaxY:int = 0;
@@ -151,6 +153,7 @@ package screens
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
+			particleVector  = new Vector.<Particle>();
 			
 			// START
 			launchCat();
@@ -198,6 +201,7 @@ package screens
 					createUpdateRainbow();
 					obstacleCreate();
 					obstacleCheck();
+					animateStarParticles();
 					
 					if (crashed)
 					{
@@ -313,7 +317,7 @@ package screens
 							
 							// STAR COLLISION
 							case 3:
-								
+								createStarParticle(obstacleToTrack);
 								collect = true;
 								fxChannel = Sounds.sndFxCollect.play();
 								obstaclesToAnimate.splice(i, 1);
@@ -338,6 +342,55 @@ package screens
 						this.removeChild(obstacleToTrack);
 					}
 					
+				}
+			}
+		}
+		
+		private function createStarParticle(obstacleToTrack:Obstacle)
+		{
+			var count:int = 5;
+			while (count > 0) {
+				count--;
+				
+				var starParticle:Particle = new Particle();
+				this.addChild(starParticle);
+				
+				starParticle.x = obstacleToTrack.x + Math.random() * 40 - 20;
+				starParticle.y = obstacleToTrack.y - Math.random() * 40;
+				
+				starParticle.speedX = Math.random() * 2 + 1;
+				starParticle.speedY = Math.random() * 5;
+				starParticle.spin = Math.random() * 15;
+				
+				starParticle.scaleX = starParticle.scaleY = Math.random() * 0.3 + 0.3;
+				particleVector.push(starParticle);
+			}
+		}
+		
+		private function animateStarParticles()
+		{
+			for (var i:uint = 0; i < particleVector.length; i++)
+			{
+				var starParticletoTrack:Particle = particleVector[i];
+				if (starParticletoTrack)
+				{
+					starParticletoTrack.scaleX -= 0.03;
+					starParticletoTrack.scaleY = starParticletoTrack.scaleX;
+					
+					starParticletoTrack.y -= starParticletoTrack.speedY;
+					starParticletoTrack.speedY -= starParticletoTrack.speedY * 0.2;
+					
+					starParticletoTrack.x += starParticletoTrack.speedX;
+					starParticletoTrack.speedX--;
+					
+					starParticletoTrack.rotation += deg2rad(starParticletoTrack.spin);
+					starParticletoTrack.spin *= 1.1;
+					
+					if (starParticletoTrack.scaleY <= 0.02) {
+						particleVector.splice(i, 1);
+						this.removeChild(starParticletoTrack);
+						starParticletoTrack = null;
+					}
 				}
 			}
 		}
