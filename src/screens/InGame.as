@@ -4,6 +4,7 @@ package screens
 	import flash.utils.getTimer;
 	import flash.media.SoundMixer;
 	import flash.media.SoundChannel;
+	import objects.bgStar;
 	import objects.Obstacle;
 	import objects.Particle;
 	import starling.core.Starling;
@@ -43,7 +44,11 @@ package screens
 		private var fxChannel:SoundChannel;
 		
 		private var spawnDelay:Number;
-		private var itemElapsed:Number;
+		private var elapsed:Number;
+		
+		private var bgDelay:Number = 20 + Math.round(Math.random() * 30);
+		private var bgVector:Vector.<bgStar> = new Vector.<bgStar>();
+		private var newStar:bgStar;
 		
 		private var gameState:String;
 		
@@ -142,7 +147,7 @@ package screens
 			score = 0;
 			scoreText.text = score.toString();
 			spawnDelay = 100;
-			itemElapsed = 0;
+			elapsed = 0;
 			cat.x = -stage.stageWidth;
 			cat.y = (stage.stageHeight / 2) + 2;
 			cat.rotation = 0;
@@ -191,13 +196,14 @@ package screens
 					
 					break;
 					
-				case "flying":	// game is running
+				case "flying":	// GAME LOOP (game is running)
 					
 					catMoving();
 					createUpdateRainbow();
 					obstacleCreate();
 					obstacleCheck();
 					animateStarParticles();
+					bgCreate();
 					
 					if (crashed)
 					{
@@ -210,8 +216,6 @@ package screens
 							cat.disposeCrashArt();
 						}
 					}
-					
-					//elapsed++;
 					
 					break;
 					
@@ -394,9 +398,9 @@ package screens
 			var obstacleCreated:Obstacle;
 			var type:int;
 			
-			itemElapsed++;
+			elapsed++;
 			
-			if (itemElapsed >= spawnDelay)
+			if (elapsed >= spawnDelay)
 			{
 				
 				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
@@ -535,7 +539,44 @@ package screens
 						break;
 				}
 					
-				itemElapsed = 0;
+				elapsed = 0;
+			}
+		}
+		
+		private function bgCreate():void
+		{
+			var trackedStar:bgStar;
+			
+			if (bgVector.length > 0)
+			{
+				for (var st:uint = 0; st < bgVector.length; st++)
+				{
+					trackedStar = bgVector[st];
+					
+					if (trackedStar.x < 0)
+					{	
+						bgVector.splice(st, 1);
+						this.removeChild(trackedStar);
+						//trace("bg star erased!");
+					}
+				}
+			}
+			
+			bgDelay--;
+			
+			if (bgDelay <= 0)
+			{
+				newStar = new bgStar;
+				bgVector.push(newStar);
+				
+				newStar.y = Math.round(Math.random() * stage.stageHeight);
+				newStar.x = stage.stageWidth;
+				
+				this.addChild(newStar);
+				this.setChildIndex(newStar, 1);
+				//trace("bg star created!");
+				
+				bgDelay = 20 + Math.round(Math.random() * 30);
 			}
 		}
 		

@@ -11,21 +11,38 @@ package objects
 	{
 		private var starArt:MovieClip;
 		
+		public function bgStar()
+		{
+			super();
+			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
 		private function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
 			animate();
-		}		
+		}
 		
 		private function animate():void
 		{
+			var starScale:Number;
+			
+			starScale = 0.25 + Math.random() * 0.75;
+			
 			starArt = new MovieClip(Assets.getAtlas().getTextures("backgroundStar"), 3);
+			
+			starArt.x = Math.ceil(-starArt.width / 2);
+			starArt.y = Math.ceil( -starArt.height / 2);
+			starArt.scaleX = starScale;
+			starArt.scaleY = starScale;
+			starling.core.Starling.juggler.add(starArt);
+			this.addChild(starArt);
 		}
 		
 		private function onGameTick():void
 		{
-			this.x -= this.width * 0.5;
+			this.x -= this.width * 0.1;
 		}
 		
 	}
