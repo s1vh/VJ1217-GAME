@@ -55,6 +55,7 @@ package screens
 		private var hit:Boolean = false;
 		private var collect:Boolean = false;
 		private var started:Boolean = false;	// this boolean controls a convenient untouchable time when the game has started
+		private var readyToSpawn:Boolean;
 		
 		private var touch:Touch;
 		private var touchX:Number;
@@ -157,6 +158,7 @@ package screens
 			gameState = "idle";
 			touchY = stage.stageHeight / 2;
 			velocity = 10;
+			readyToSpawn = false;
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			particleVector  = new Vector.<Particle>();
 			
@@ -197,7 +199,8 @@ package screens
 					
 					else
 					{
-						gameState = "flying";
+						gameState = "flying"
+						readyToSpawn = true;
 						fxChannel = Sounds.sndFxTakeOff.play();
 					}
 					
@@ -207,8 +210,8 @@ package screens
 					
 					catMoving();
 					createUpdateRainbow();
-					obstacleCreate();
 					obstacleCheck();
+					obstacleCreate();
 					animateStarParticles();
 					bgCreate();
 					
@@ -309,9 +312,16 @@ package screens
 			
 			if (obstaclesToAnimate.length > 0)   
 			{
+				readyToSpawn = true;
+				
 				for (var i:uint = 0; i < obstaclesToAnimate.length; i++)
 				{
 					obstacleToTrack = obstaclesToAnimate[i]
+					
+					if (obstacleToTrack.x + obstacleToTrack.obstacleWidth > stage.stageWidth)
+					{
+						readyToSpawn = false;
+					}
 					
 					if (obstacleToTrack.bounds.intersects(cat.bounds) && hit == false && started)
 					{
@@ -422,9 +432,9 @@ package screens
 			var obstacleCreated:Obstacle;
 			var type:int;
 			
-			elapsed += Math.floor(velocity * 0.1);	// elapsed time depends of current velocity to prevent big blank areas and balance difficulty
+			elapsed += Math.floor(velocity * 0.1);		// elapsed time depends of current velocity to prevent big blank areas and balance difficulty
 			
-			if (elapsed >= spawnDelay)				// we use greater or equal because depending on the current velocity we can easily bypass it
+			if (elapsed >= spawnDelay && readyToSpawn)		// we use greater or equal because depending on the current velocity we can easily bypass it
 			{
 				started = true;				
 				type = 1 + Math.round(Math.random() * 9);	// randomized object spawner
