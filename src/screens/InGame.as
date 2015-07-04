@@ -54,8 +54,8 @@ package screens
 		
 		private var hit:Boolean = false;
 		private var collect:Boolean = false;
-		private var started:Boolean = false;	// this boolean controls a convenient untouchable time when the game has started
-		private var readyToSpawn:Boolean;
+		private var started:Boolean = false;		// this boolean controls a convenient untouchable time when the game has started
+		private var readyToSpawn:Boolean = false;
 		
 		private var touch:Touch;
 		private var touchX:Number;
@@ -66,6 +66,7 @@ package screens
 		
 		public static var score:int;
 		public static var velocity:Number = 10;
+		//public static var turboMode:Boolean = false;
 		
 		public dynamic function getScore():int
 		{
@@ -159,11 +160,12 @@ package screens
 			touchY = stage.stageHeight / 2;
 			velocity = 10;
 			readyToSpawn = false;
+			//turboMode = false;
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			particleVector  = new Vector.<Particle>();
 			
-			trace(rainbowVector.length);
-			trace(obstaclesToAnimate.length);
+			//trace(rainbowVector.length);
+			//trace(obstaclesToAnimate.length);
 			
 			// START
 			launchCat();
@@ -447,7 +449,7 @@ package screens
 					case 3:
 					case 4:
 						// this is the GREEN ENEMY
-						//trace("GREEN incoming");
+						trace("GREEN incoming");
 						
 						obstacleCreated = new Obstacle(1);
 						obstacleCreated.setDimensions(1);
@@ -475,7 +477,7 @@ package screens
 					case 6:
 					case 7:
 						// this is the STAR
-						//trace("STAR row incoming");
+						trace("STAR row incoming");
 						
 						var starNum:int;
 						
@@ -492,7 +494,7 @@ package screens
 							break;
 						}
 						
-						obstacleCreated.x = stage.stageWidth //+ obstacleCreated.obstacleWidth;
+						obstacleCreated.x = stage.stageWidth + obstacleCreated.obstacleWidth;
 						
 						var starY:int;
 						var starX:int;
@@ -529,7 +531,7 @@ package screens
 						
 						if (redAvailable)	// we do not want two REDs to spawn in a streak!
 						{
-							//trace("RED incoming");
+							trace("RED incoming");
 							
 							obstacleCreated = new Obstacle(2);
 							obstacleCreated.setDimensions(2);
@@ -548,7 +550,7 @@ package screens
 						
 						else	// if previous enemy was RED it spawns a GREEN one!
 						{
-							//trace("2nd RED not allowed; GREEN incoming");
+							trace("2nd RED not allowed; GREEN incoming");
 							
 							obstacleCreated = new Obstacle(1);
 							obstacleCreated.setDimensions(1);
