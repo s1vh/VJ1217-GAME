@@ -27,7 +27,7 @@ package screens
 	
 	public class InGame extends starling.display.Sprite
 	{
-		private var cat:Cat;
+		public static var cat:Cat;
 		private var obstacle:Obstacle;
 		private var enemigoCreado:int = 0;
 		private var obstaclesToAnimate:Vector.<Obstacle> = new Vector.<Obstacle>();
@@ -66,7 +66,7 @@ package screens
 		
 		public static var score:int;
 		public static var velocity:Number = 10;
-		//public static var turboMode:Boolean = false;
+		public static var turboMode:Boolean = false;
 		
 		public dynamic function getScore():int
 		{
@@ -160,7 +160,7 @@ package screens
 			touchY = stage.stageHeight / 2;
 			velocity = 10;
 			readyToSpawn = false;
-			//turboMode = false;
+			turboMode = false;
 			if (!Sounds.muted) musicChannel = Sounds.sndBgMain.play(0, 9999);
 			particleVector  = new Vector.<Particle>();
 			
@@ -217,9 +217,18 @@ package screens
 					animateStarParticles();
 					bgCreate();
 					
-					if (velocity < 24)				// we upgrade the velocity progresively until 24 to get the feeling of acceleration
+					if (velocity < 20)	// we upgrade the velocity progresively until 24 to get the feeling of acceleration
 					{
-						velocity += Math.log(1.01) * 0.25;
+						velocity += Math.log(1.02) * 0.25;
+						//velocity += Math.log(1.01) * 0.25;	// original acceleration
+					}
+					
+					if (velocity >= 20 && turboMode == false)
+					{
+						velocity = 20;
+						turboMode = true;
+						fxChannel = Sounds.sndFxTakeOff.play();
+						trace("TURBO!!");
 					}
 					
 					if (crashed)
@@ -263,37 +272,57 @@ package screens
 				velocity = 10;		// we reset velocity on hit!
 				hit = false;
 				
-				if (hitpoints - 20 > 0)
+				if (turboMode)
 				{
+					if (hitpoints - 10 > 0)
+					{
+						hitpoints = hitpoints - 10;
+					}
 					
-					hitpoints = hitpoints - 20;
+					else
+					{
+						hitpoints = 1;
+					}
+					
+					turboMode = false;
 					crashed = true;
 					cat.disposeCatArt();
 					trace(hitpoints + " HP");
 				}
 				
 				else
-				{
-					musicChannel.stop();
-					fxChannel = Sounds.sndFxDeath.play();
-					
-					// reset vectors
-					for (var rb:uint = 0; rb < rainbowVector.length; rb++)
+				{	
+					if (hitpoints - 20 > 0)
 					{
-						rainbowVector.splice(rb, 0);
-						this.removeChild(rainbowVector[rb]);
+						hitpoints = hitpoints - 20;
+						crashed = true;
+						cat.disposeCatArt();
+						trace(hitpoints + " HP");
 					}
 					
-					for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
+					else
 					{
-						obstacleToTrack = obstaclesToAnimate[obs];
-						obstaclesToAnimate.splice(obs, 1);
-						this.removeChild(obstacleToTrack);
+						musicChannel.stop();
+						fxChannel = Sounds.sndFxDeath.play();
+						
+						// reset vectors
+						for (var rb:uint = 0; rb < rainbowVector.length; rb++)
+						{
+							rainbowVector.splice(rb, 0);
+							this.removeChild(rainbowVector[rb]);
+						}
+						
+						for (var obs:uint = 0; obs < obstaclesToAnimate.length; obs++)
+						{
+							obstacleToTrack = obstaclesToAnimate[obs];
+							obstaclesToAnimate.splice(obs, 1);
+							this.removeChild(obstacleToTrack);
+						}
+						
+						gameState = "gameOver";
+						trace("GAME OVER");
+						this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 					}
-					
-					gameState = "gameOver";
-					trace("GAME OVER");
-					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, { id: "over" }, true));
 				}
 				
 			}
@@ -320,7 +349,7 @@ package screens
 				{
 					obstacleToTrack = obstaclesToAnimate[i]
 					
-					if (obstacleToTrack.x + obstacleToTrack.obstacleWidth > stage.stageWidth)
+					if (obstacleToTrack.x + obstacleToTrack.obstacleWidth * velocity * 0.1 > stage.stageWidth)	// the distance between objects depends of the velocity to make it playable
 					{
 						readyToSpawn = false;
 					}
@@ -504,17 +533,44 @@ package screens
 						
 						while (starNum > 0)
 						{
-							obstacleCreated = new Obstacle(3);
-							obstacleCreated.setDimensions(3);
+							if (turboMode)
+							{
+								obstacleCreated = new Obstacle(3);
+								obstacleCreated.setDimensions(3);
+								
+								obstacleCreated.y = starY + obstacleCreated.obstacleHeight / 2;
+								obstacleCreated.x = starX + obstacleCreated.obstacleWidth / 2;
+								
+								this.addChild(obstacleCreated);
+								obstaclesToAnimate.push(obstacleCreated);
+								
+								obstacleCreated = new Obstacle(3);
+								obstacleCreated.setDimensions(3);
+								
+								obstacleCreated.y = starY - obstacleCreated.obstacleHeight / 2;
+								obstacleCreated.x = starX + obstacleCreated.obstacleWidth / 2;
+								
+								this.addChild(obstacleCreated);
+								obstaclesToAnimate.push(obstacleCreated);
+								
+								starX = obstacleCreated.x;
+								starNum--;
+							}
 							
-							obstacleCreated.y = starY;
-							obstacleCreated.x = starX + obstacleCreated.obstacleWidth / 2;
-							
-							this.addChild(obstacleCreated);
-							obstaclesToAnimate.push(obstacleCreated);
-							
-							starX = obstacleCreated.x;
-							starNum--;
+							else
+							{
+								obstacleCreated = new Obstacle(3);
+								obstacleCreated.setDimensions(3);
+								
+								obstacleCreated.y = starY;
+								obstacleCreated.x = starX + obstacleCreated.obstacleWidth / 2;
+								
+								this.addChild(obstacleCreated);
+								obstaclesToAnimate.push(obstacleCreated);
+								
+								starX = obstacleCreated.x;
+								starNum--;
+							}
 						}
 						
 						prevMinY = obstacleCreated.y - obstacleCreated.obstacleHeight / 2;

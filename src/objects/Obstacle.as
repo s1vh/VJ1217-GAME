@@ -77,16 +77,27 @@ package objects
 		}
 		
 		private function onGameTick():void
-		{			
+		{
+			this.x -= Math.round(InGame.velocity);
+			
 			if (this.obstacleType == 2)
 			{
-				this.x -= Math.round(InGame.velocity);
 				this.y += Math.cos(this.x * 0.005) * 10;
 			}
 			
-			else
+			if (this.obstacleType == 3 && InGame.turboMode)
 			{
-				this.x -= Math.round(InGame.velocity);
+				this.x -= Math.round(InGame.velocity / (1 + Math.abs(this.x - InGame.cat.x) * 0.005));
+				
+				if (this.y < InGame.cat.y)
+				{
+					this.y += Math.round(5 / (1 + (InGame.cat.y - this.y) * 0.005));
+				}
+				
+				if (this.y > InGame.cat.y)
+				{					
+					this.y -= Math.round(5 / (1 + (this.y - InGame.cat.y) * 0.005));
+				}
 			}
 			
 		}
