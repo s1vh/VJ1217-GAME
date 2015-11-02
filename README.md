@@ -5,4 +5,8 @@ This is a game made by a two persons team (Karrion and me) for our grade's Web G
 
 It is written in ac3 and we used the Starling (and API focused on development for mobile devices) and TweenLite libraries.
 
+License: Creative Commmons (acknowledgment, non-commercial, share-alike)
+
+Authors: Óscar Gil, Miguel Campins
+
 demo video --> https://youtu.be/1mGbIkdlWQ0
